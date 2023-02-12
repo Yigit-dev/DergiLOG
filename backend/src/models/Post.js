@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const PostSchema = new mongoose.Schema({
   cover: { type: String, required: true, min: 4, max: 30 },
-  title: { type: String, required: true, unique: true, min: 4, max: 30 },
+  title: { type: String, required: true, min: 4, max: 30 },
   slug: { type: String, required: true, unique: true, min: 3, max: 40 },
   description: { type: String, required: true },
   date: { type: Date, required: true, default: Date.now() },

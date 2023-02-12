@@ -1,16 +1,14 @@
 const Journal = require('../models/Journal')
-const User = require('../models/User')
 
 const { userCheck } = require('../middlewares/checkAuth')
 
 const journalCreate = async (req, res) => {
   userCheck(req.user.role, res)
-  const user = await User.findOne({ name: 'sahra' })
   const count = await Journal.find({}).count()
   let info = {
     admin_id: req.user._id,
-    moderator_id: user._id,
-    author_id: user._id,
+    moderator_id: req.user._id,
+    author_id: req.user._id,
     followers: req.body.followers,
     journal_num: count + 1,
   }
