@@ -6,6 +6,7 @@ const {
   userRegister,
   getAllUsers,
   userLoggedIn,
+  userLoggedOut,
   getUser,
   updateUser,
   deleteUser,
@@ -14,6 +15,7 @@ router.get('/', getAllUsers)
 router.get('/user/:name', getUser)
 router.post('/register', validate(schemas.registerValidation), userRegister)
 router.post('/login', validate(schemas.loginValidation), userLoggedIn)
+router.post('/logout', userLoggedOut)
 router.put('/', checkToken, validate(schemas.updateValidation), updateUser)
 router.delete('/', validate(schemas.deleteValidation), deleteUser)
 module.exports = router

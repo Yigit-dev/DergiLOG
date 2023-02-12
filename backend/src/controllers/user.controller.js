@@ -39,13 +39,29 @@ const userLoggedIn = async (req, res) => {
       message: 'User cant find',
     })
   }
-  const comparePass = await comparePassword(req.body.password, user.password, res)
+  const comparePass = await comparePassword(password, user.password, res)
   if (!comparePass) {
     res.status(201).json({
       message: 'User not Found',
     })
   }
-  createToken(user, res)
+  const token = await createToken(user)
+  console.log(token)
+  res.cookie('user_token', token, {
+    httpOnly: true,
+    secure: false,
+  })
+  res.status(200).json({
+    message: 'Successfully logged in',
+  })
+}
+
+const userLoggedOut = async (req, res) => {
+  await res.clearCookie('user_token')
+
+  res.status(200).json({
+    message: 'Successfully logged out',
+  })
 }
 
 const updateUser = async (req, res) => {
@@ -75,4 +91,4 @@ const deleteUser = async (req, res) => {
   const user = await User.findOneAndRemove({ email })
   res.send('user deleted')
 }
-module.exports = { userRegister, getAllUsers, getUser, userLoggedIn, updateUser, deleteUser }
+module.exports = { userRegister, getAllUsers, getUser, userLoggedIn, userLoggedOut, updateUser, deleteUser }
