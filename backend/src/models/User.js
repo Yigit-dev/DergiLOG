@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
-  role: { type: String, enum: ['user', 'admin', 'moderator', 'author'], default: 'user' }, // int deger de tutulabilir videodaki adam gibi
+  role: { type: String, enum: ['user', 'admin', 'moderator', 'author'], default: 'user' },
+  username: { type: String, required: true, min: 6, max: 30, trim: true },
   name: { type: String, required: true, trim: true, min: 3, max: 30 },
   surname: { type: String, required: true, trim: true, min: 3, max: 30 },
   email: { type: String, required: true, unique: true, trim: true, min: 3, max: 30 },
