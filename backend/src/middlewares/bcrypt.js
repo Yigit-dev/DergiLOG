@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+
 const hashPassword = async (password, res) => {
   const salt = await bcrypt.genSalt(10)
   const hash = await bcrypt.hash(password, salt)
@@ -6,7 +7,7 @@ const hashPassword = async (password, res) => {
   // parolamız hashlendi
 }
 
-const comparePassword = async (password, hash, res, next) => {
+const comparePassword = async (password, hash, res) => {
   const checkPassword = await bcrypt.compare(password, hash)
   return checkPassword
 }

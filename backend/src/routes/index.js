@@ -4,10 +4,7 @@ const journalRoutes = require('./journal.routes')
 const postRoutes = require('../routes/post.routes')
 const timelineRoutes = require('../routes/timeline.routes')
 const { checkToken } = require('../middlewares/auth')
-const { hashPassword } = require('../middlewares/bcrypt')
-router.get('/hash', (req, res) => {
-  hashPassword('1234', res)
-})
+
 router.use('/user', userRoutes)
 router.use('/journal', checkToken, journalRoutes)
 router.use('/post', checkToken, postRoutes)

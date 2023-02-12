@@ -1,6 +1,7 @@
 const { createToken, checkToken } = require('../middlewares/auth')
 const User = require('../models/User')
 const { hashPassword, comparePassword } = require('../middlewares/bcrypt')
+
 const getAllUsers = async (req, res) => {
   const users = await User.find({})
   res.status(200).json(users)
@@ -12,18 +13,23 @@ const getUser = async (req, res) => {
   res.status(200).json(user)
 }
 const userRegister = async (req, res) => {
-  const { password } = req.body
-  const hash = await hashPassword(password, res)
-  const newUser = await User.create({
-    role: req.body.role,
-    name: req.body.name,
-    surname: req.body.surname,
-    email: req.body.email,
-    photo: req.body.photo,
-    gender: req.body.gender,
-    password: hash,
-  })
-  res.status(200).json(newUser)
+  try {
+    const { password } = req.body
+    const hash = await hashPassword(password, res)
+    const newUser = await User.create({
+      username: req.body.username,
+      name: req.body.name,
+      surname: req.body.surname,
+      email: req.body.email,
+      password: hash,
+      photo: req.body.photo,
+      password: hash,
+      gender: req.body.gender,
+    })
+    res.status(200).json(newUser)
+  } catch (error) {
+    res.send('HATALI')
+  }
 }
 const userLoggedIn = async (req, res) => {
   const { email, password } = req.body
