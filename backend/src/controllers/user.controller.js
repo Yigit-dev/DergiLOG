@@ -1,6 +1,8 @@
 const { createToken, checkToken } = require('../middlewares/auth')
 const User = require('../models/User')
 const { hashPassword, comparePassword } = require('../middlewares/bcrypt')
+const upload = require('../middlewares/lib/upload')
+const multer = require('multer')
 
 const getAllUsers = async (req, res) => {
   const users = await User.find({})
@@ -91,4 +93,28 @@ const deleteUser = async (req, res) => {
   const user = await User.findOneAndRemove({ email })
   res.send('user deleted')
 }
-module.exports = { userRegister, getAllUsers, getUser, userLoggedIn, userLoggedOut, updateUser, deleteUser }
+
+const uploadPhoto = async (req, res) => {
+  upload(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      console.log('MULTER KAYNAKLI HATA')
+    } else if (err) {
+      console.log('FOTO YUKLENIRKEN HATA' + err)
+    } else {
+      res.status(200).json({
+        message: 'FOTO YUKLEME BASARILI',
+        name: req.savedImages,
+      })
+    }
+  })
+}
+module.exports = {
+  userRegister,
+  getAllUsers,
+  getUser,
+  userLoggedIn,
+  userLoggedOut,
+  updateUser,
+  deleteUser,
+  uploadPhoto,
+}
