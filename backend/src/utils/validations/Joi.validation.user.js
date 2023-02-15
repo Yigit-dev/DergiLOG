@@ -18,9 +18,9 @@ const loginValidation = Joi.object({
   password: Joi.string().required().min(6).max(120),
 })
 const updateValidation = Joi.object({
-  user_id: Joi.string().hex().length(24).required(),
+  user_id: Joi.string().hex().length(24),
   role: Joi.string().default('user'),
-  username: Joi.string().required().min(6).max(30),
+  username: Joi.string().min(6).max(30),
   name: Joi.string().min(3).max(30),
   surname: Joi.string().min(3).max(30),
   email: Joi.string().email().required().min(3).max(30),
