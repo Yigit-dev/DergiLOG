@@ -14,7 +14,7 @@ const {
   uploadPhoto,
 } = require('../controllers/user.controller')
 router.get('/', getAllUsers)
-router.get('/user/:name', getUser)
+router.get('/:id', getUser)
 router.post('/register', validate(schemas.registerValidation), userRegister)
 router.post('/login', validate(schemas.loginValidation), userLoggedIn)
 router.post('/uploads', uploadPhoto)

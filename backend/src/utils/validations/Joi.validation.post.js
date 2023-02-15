@@ -15,13 +15,13 @@ const createValidation = Joi.object({
   content: Joi.string().required().min(10),
 })
 const updateValidation = Joi.object({
-  post_id: Joi.string().hex().length(24).required(),
+  post_id: Joi.string().hex().length(24),
   cover: Joi.string().min(4).max(30),
   title: Joi.string().min(4).max(30),
   slug: Joi.string().min(3).max(40),
   description: Joi.string(),
   date: Joi.date(),
-  author_id: Joi.string().hex().length(24).required(),
+  author_id: Joi.string().hex().length(24),
   tags: Joi.array().items(Joi.string()),
   category: Joi.string(),
   likes: Joi.array().items(Joi.string()),
@@ -29,8 +29,5 @@ const updateValidation = Joi.object({
   post_type: Joi.string(),
   content: Joi.string().min(10),
 })
-const deleteValidation = Joi.object({
-  post_id: Joi.string().hex().length(24).required(),
-  title: Joi.string().min(4).max(30),
-})
-module.exports = { createValidation, updateValidation, deleteValidation }
+
+module.exports = { createValidation, updateValidation }
