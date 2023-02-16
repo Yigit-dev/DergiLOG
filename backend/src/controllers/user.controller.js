@@ -1,5 +1,6 @@
 const { createToken, checkToken } = require('../middlewares/auth')
 const User = require('../models/User')
+const Profile = require('../models/Profile')
 const { hashPassword, comparePassword } = require('../middlewares/bcrypt')
 const upload = require('../middlewares/lib/upload')
 const multer = require('multer')
@@ -33,10 +34,13 @@ const userRegister = async (req, res) => {
     const newUser = await User.create({
       ...req.body,
       password: hash,
-      photo: 'snp.png',
+    })
+    const userProfile = await Profile.create({
+      ...req.body,
+      user_id: newUser._id,
     })
     // !! multer ile fotografı buraya ekleyecegiz
-    return new Response(newUser).created(res)
+    return new Response(newUser, userProfile).created(res)
   } catch (error) {
     if (error.name === 'MongoServerError' && error.message.includes('E11000')) {
       return res.status(400).json({
@@ -55,7 +59,7 @@ const userLoggedIn = async (req, res) => {
   }
   const comparePass = await comparePassword(password, user.password, res)
 
-  if (user.username !== username || !comparePass) {
+  if ((username !== undefined && user.username !== username) || !comparePass) {
     throw new APIError('Email , Password or Username  Incorrect', 210)
   }
 
@@ -73,6 +77,7 @@ const userLoggedOut = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
+  //! Updated only username email password
   const { email, password, username } = req.body
   const hash = await hashPassword(password, res)
   const user = await User.findOneAndUpdate(
@@ -86,7 +91,7 @@ const updateUser = async (req, res) => {
     throw new APIError('Email , Password or Username  Incorrect', 210)
   }
   const comparePass = await comparePassword(password, user.password, res)
-  if (user.username !== username || !comparePass) {
+  if ((username !== undefined && user.username !== username) || !comparePass) {
     throw new APIError('Email , Password or Username  Incorrect', 210)
   }
   return new Response('', 'Successsfully Updated').success(res)
@@ -98,7 +103,8 @@ const deleteUser = async (req, res) => {
     throw new APIError('Email Password or Username Incorrect', 210)
   }
   const comparePass = await comparePassword(password, user.password, res)
-  if (user.username !== username || !comparePass) {
+  const profileuser = await Profile.findOneAndRemove(user.user_id)
+  if ((username !== undefined && user.username !== username) || !comparePass || !profileuser) {
     throw new APIError('Email Password or Username Incorrect', 210)
   }
   return new Response('', 'Successfully Deleted').success(res)
