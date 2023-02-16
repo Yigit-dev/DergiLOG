@@ -11,7 +11,7 @@ const createToken = async user => {
     algorithm: 'HS256',
     expiresIn: process.env.JWT_EXPIRES_IN,
   })
-
+  console.log(token)
   return token
 }
 

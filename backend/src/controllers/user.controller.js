@@ -3,111 +3,120 @@ const User = require('../models/User')
 const { hashPassword, comparePassword } = require('../middlewares/bcrypt')
 const upload = require('../middlewares/lib/upload')
 const multer = require('multer')
+const Response = require('../utils/response')
+const APIError = require('../utils/error')
 
 const getAllUsers = async (req, res) => {
   const users = await User.find({})
-  res.status(200).json(users)
+  if (!users || users.length == 0) {
+    throw new APIError('Users Not Found')
+  }
+  return new Response(users).success(res)
 }
+
 const getUser = async (req, res) => {
-  console.log(req.params)
-  const name = req.params.name
-  const user = await User.findOne({ name })
-  res.status(200).json(user)
+  try {
+    const { id } = req.params
+    const user = await User.findById(id)
+    if (!user) {
+      throw new APIError('User Not Found')
+    }
+    return new Response(user).success(res)
+  } catch (error) {
+    throw new APIError('User Not Found')
+  }
 }
 const userRegister = async (req, res) => {
   try {
     const { password } = req.body
     const hash = await hashPassword(password, res)
     const newUser = await User.create({
-      username: req.body.username,
-      name: req.body.name,
-      surname: req.body.surname,
-      email: req.body.email,
+      ...req.body,
       password: hash,
-      photo: req.body.photo,
-      password: hash,
-      gender: req.body.gender,
+      photo: 'snp.png',
     })
-    res.status(200).json(newUser)
+    // !! multer ile fotografı buraya ekleyecegiz
+    return new Response(newUser).created(res)
   } catch (error) {
-    res.send('HATALI')
+    if (error.name === 'MongoServerError' && error.message.includes('E11000')) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email must be unique',
+      })
+    }
+    throw new APIError('Failed to Create User')
   }
 }
 const userLoggedIn = async (req, res) => {
-  const { email, password } = req.body
+  const { email, password, username } = req.body
   const user = await User.findOne({ email })
   if (!user) {
-    res.status(201).json({
-      message: 'User cant find',
-    })
+    throw new APIError('Email , Password or Username  Incorrect', 210)
   }
   const comparePass = await comparePassword(password, user.password, res)
-  if (!comparePass) {
-    res.status(201).json({
-      message: 'User not Found',
-    })
+
+  if (user.username !== username || !comparePass) {
+    throw new APIError('Email , Password or Username  Incorrect', 210)
   }
+
   const token = await createToken(user)
-  console.log(token)
   res.cookie('user_token', token, {
     httpOnly: true,
     secure: false,
   })
-  res.status(200).json({
-    message: 'Successfully logged in',
-  })
+  return new Response(user, 'Successfully logged in').success(res)
 }
 
 const userLoggedOut = async (req, res) => {
   await res.clearCookie('user_token')
-
-  res.status(200).json({
-    message: 'Successfully logged out',
-  })
+  return new Response('', 'Successfully logged out').success(res)
 }
 
 const updateUser = async (req, res) => {
-  const { email, password } = req.body
+  const { email, password, username } = req.body
+  const hash = await hashPassword(password, res)
   const user = await User.findOneAndUpdate(
     { email },
     {
-      email: 'new' + email,
+      ...req.body,
+      password: hash,
     }
   )
   if (!user) {
-    res.status(201).json({
-      message: 'User cant find',
-    })
+    throw new APIError('Email , Password or Username  Incorrect', 210)
   }
-
   const comparePass = await comparePassword(password, user.password, res)
-  if (!comparePass) {
-    res.status(201).json({
-      message: 'User cant find',
-    })
+  if (user.username !== username || !comparePass) {
+    throw new APIError('Email , Password or Username  Incorrect', 210)
   }
-  res.status(200).json(user)
+  return new Response('', 'Successsfully Updated').success(res)
 }
 const deleteUser = async (req, res) => {
-  const { email, password } = req.body
+  const { email, password, username } = req.body
   const user = await User.findOneAndRemove({ email })
-  res.send('user deleted')
+  if (!user) {
+    throw new APIError('Email Password or Username Incorrect', 210)
+  }
+  const comparePass = await comparePassword(password, user.password, res)
+  if (user.username !== username || !comparePass) {
+    throw new APIError('Email Password or Username Incorrect', 210)
+  }
+  return new Response('', 'Successfully Deleted').success(res)
 }
 
 const uploadPhoto = async (req, res) => {
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
-      console.log('MULTER KAYNAKLI HATA')
+      //! Multer status code
+      return new Response('', 'Multer Error').error400(res)
     } else if (err) {
-      console.log('FOTO YUKLENIRKEN HATA' + err)
+      return new Response('', err.message).error400(res)
     } else {
-      res.status(200).json({
-        message: 'FOTO YUKLEME BASARILI',
-        name: req.savedImages,
-      })
+      return new Response(req.savedImages, 'Photo Uploaded Successfully').success(res)
     }
   })
 }
+
 module.exports = {
   userRegister,
   getAllUsers,

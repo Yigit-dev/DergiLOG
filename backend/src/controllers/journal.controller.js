@@ -1,35 +1,49 @@
 const Journal = require('../models/Journal')
-
+const APIError = require('../utils/error')
+const Response = require('../utils/response')
 const checkRole = require('../middlewares/checkRoles')
 
 const journalCreate = async (req, res) => {
   checkRole('admin', 'moderator', 'author')
   const count = await Journal.find({}).count()
   let info = {
+    ...req.body,
     admin_id: req.user._id,
     moderator_id: req.user._id,
     author_id: req.user._id,
-    followers: req.body.followers,
     journal_num: count + 1,
   }
-  console.log(info)
   const journal = await Journal.create(info)
-  res.status(200).json(journal)
+  if (!journal) {
+    throw new APIError('Failed To Create Journal')
+  }
+  return new Response(journal).created(res)
 }
-
 const updateJournal = async (req, res) => {
-  checkRole('admin', 'moderator', 'author')
-  const { journal_num } = req.body
-  const journal = await Journal.findOneAndUpdate({ journal_num }, { post_list: ['updated'] })
-  res.status(200).json({
-    message: 'Journal updated',
-  })
+  try {
+    checkRole('admin', 'moderator', 'author')
+    const { id } = req.params
+    const journal = await Journal.findOneAndUpdate(id, req.body)
+    if (!journal) {
+      throw new APIError('Failed to Update Journal')
+    }
+    return new Response(journal, 'Successfully Updated').success(res)
+  } catch (error) {
+    throw new APIError('Failed to Update Journal')
+  }
 }
 const deleteJournal = async (req, res) => {
-  checkRole('admin', 'moderator', 'author')
-  const { journal_num } = req.body
-  await Journal.findOneAndRemove({ journal_num })
-  res.status(200).json({ message: 'Journal deleted' })
+  try {
+    checkRole('admin', 'moderator', 'author')
+    const { id } = req.params
+    const journal = await Journal.findOneAndRemove(id)
+    if (!journal) {
+      throw new APIError('Failed to Update Journal')
+    }
+    return new Response('', 'Successfully Deleted').success(res)
+  } catch (error) {
+    throw new APIError('Failed to Update Journal')
+  }
 }
 
 module.exports = { journalCreate, updateJournal, deleteJournal }
