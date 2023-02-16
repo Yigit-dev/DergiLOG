@@ -13,6 +13,7 @@ const {
   deleteUser,
   uploadPhoto,
 } = require('../controllers/user.controller')
+
 router.get('/', getAllUsers)
 router.get('/:id', getUser)
 router.post('/register', validate(schemas.registerValidation), userRegister)
