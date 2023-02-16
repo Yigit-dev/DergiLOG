@@ -4,9 +4,10 @@ const journalRoutes = require('./journal.routes')
 const postRoutes = require('../routes/post.routes')
 const timelineRoutes = require('../routes/timeline.routes')
 const { checkToken } = require('../middlewares/auth')
-
+const profileRoutes = require('../routes/profile.routes')
 router.use('/user', userRoutes)
 router.use('/journal', checkToken, journalRoutes)
 router.use('/post', checkToken, postRoutes)
 router.use('/timeline', timelineRoutes)
+router.use('/profile', profileRoutes)
 module.exports = router
