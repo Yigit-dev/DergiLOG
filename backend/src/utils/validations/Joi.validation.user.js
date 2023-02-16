@@ -13,8 +13,7 @@ const registerValidation = Joi.object({
   followed: Joi.array().items(Joi.string()),
 })
 const loginValidation = Joi.object({
-  username: Joi.string().min(6).max(30),
-  email: Joi.string().email().required().min(3).max(30),
+  parametre: Joi.string().required().min(3).max(30),
   password: Joi.string().required().min(6).max(120),
 })
 const updateValidation = Joi.object({
