@@ -78,6 +78,7 @@ const userLoggedOut = async (req, res) => {
 
 const updateUser = async (req, res) => {
   //! Updated only username email password
+
   const { email, password, username } = req.body
   const hash = await hashPassword(password, res)
   const user = await User.findOneAndUpdate(
@@ -87,15 +88,21 @@ const updateUser = async (req, res) => {
       password: hash,
     }
   )
+
   if (!user) {
     throw new APIError('Email , Password or Username  Incorrect', 210)
   }
+
+  if (!user._id.equals(req.user._id)) throw new APIError('Invalid Token', 210)
+
   const comparePass = await comparePassword(password, user.password, res)
+
   if ((username !== undefined && user.username !== username) || !comparePass) {
     throw new APIError('Email , Password or Username  Incorrect', 210)
   }
   return new Response('', 'Successsfully Updated').success(res)
 }
+
 const deleteUser = async (req, res) => {
   const { email, password, username } = req.body
   const user = await User.findOneAndRemove({ email })
