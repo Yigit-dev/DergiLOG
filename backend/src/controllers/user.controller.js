@@ -45,21 +45,22 @@ const userRegister = async (req, res) => {
     if (error.name === 'MongoServerError' && error.message.includes('E11000')) {
       return res.status(400).json({
         success: false,
-        message: 'Email must be unique',
+        message: ' must be unique',
       })
     }
     throw new APIError('Failed to Create User')
   }
 }
 const userLoggedIn = async (req, res) => {
-  const { email, password, username } = req.body
-  const user = await User.findOne({ email })
+  const { parametre, password } = req.body
+  const user = await User.find({ $or: [{ email: parametre }, { username: parametre }] })
+  console.log(user)
   if (!user) {
     throw new APIError('Email , Password or Username  Incorrect', 210)
   }
   const comparePass = await comparePassword(password, user.password, res)
 
-  if ((username !== undefined && user.username !== username) || !comparePass) {
+  if (!comparePass) {
     throw new APIError('Email , Password or Username  Incorrect', 210)
   }
 
