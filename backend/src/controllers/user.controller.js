@@ -52,8 +52,8 @@ const userRegister = async (req, res) => {
   }
 }
 const userLoggedIn = async (req, res) => {
-  const { parametre, password } = req.body
-  const user = await User.find({ $or: [{ email: parametre }, { username: parametre }] })
+  const { login, password } = req.body
+  const user = await User.findOne({ $or: [{ email: login }, { username: login }] })
   console.log(user)
   if (!user) {
     throw new APIError('Email , Password or Username  Incorrect', 210)
