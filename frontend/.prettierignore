@@ -10,3 +10,4 @@ tmp/
 package-lock.json
 public/
 assets/
+tailwind.config.js
