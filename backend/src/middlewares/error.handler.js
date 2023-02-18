@@ -24,6 +24,11 @@ const errorHandlerMiddleware = (err, req, res, next) => {
       success: false,
       message: 'SystemError occurred',
     })
+  } else {
+    return res.status(400).json({
+      success: false,
+      message: 'API ERROR',
+    })
   }
 }
 module.exports = { errorHandlerMiddleware }

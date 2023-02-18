@@ -10,6 +10,8 @@ const indexRouter = require('./routes/index')
 const cookieParser = require('cookie-parser')
 const path = require('path')
 const { errorHandlerMiddleware } = require('./middlewares/error.handler')
+const mongoSanitize = require('express-mongo-sanitize')
+
 app.use(cors())
 
 app.use(express.json())
@@ -17,8 +19,14 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 app.use(cookieParser())
-app.use(indexRouter)
 
+app.use(
+  mongoSanitize({
+    replaceWith: '_',
+  })
+)
+
+app.use(indexRouter)
 app.use(errorHandlerMiddleware)
 //  MULTER
 app.use('/uploads', express.static(path.join(__dirname, 'public')))
