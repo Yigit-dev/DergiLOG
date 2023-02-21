@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
+const APIError = require('../utils/error')
 
 const createToken = async user => {
   const payload = {
@@ -17,29 +18,25 @@ const createToken = async user => {
 
 const checkToken = async (req, res, next) => {
   const headerToken = req.headers.authorization && req.headers.authorization.startsWith('Bearer ')
-  if (!headerToken || !req.cookies.user_token) {
-    res.status(401).json({
-      message: 'oturum açın',
-    })
+  if (!headerToken) {
+    throw new APIError('Token needs to start with Bearer!', 400)
   }
-
+  if (!req.cookies.user_token) {
+    throw new APIError('Please login', 401)
+  }
   const token = req.headers.authorization.split(' ')[1]
   // console.log(token)
   jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, decodedToken) => {
     if (err) {
-      res.status(401).json({
-        message: 'invalid token',
-      })
+      return new APIError('Invalid token', 401)
     }
     //decodedToken.sub ( user._id )
     const userInfo = await User.findById(decodedToken.sub).select('role _id name email')
     if (!userInfo) {
-      res.status(401).json({
-        message: 'invalid token',
-      })
+      throw new APIError('Invalid token', 401)
     }
     req.user = userInfo
-    console.log(req.user)
+    console.log('User from checktoken' + req.user)
     next()
   })
 }

@@ -14,6 +14,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     })
   }
   if (err.name === 'TypeError') {
+    console.log(err)
     return res.status(400).json({
       success: false,
       message: 'TypeError occurred',

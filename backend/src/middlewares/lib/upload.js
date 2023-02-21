@@ -5,7 +5,7 @@ const fs = require('fs')
 const fileFilter = (req, file, cb) => {
   const allowedMimeTypes = ['images/jpg', 'image/gif', 'image/jpeg', 'image/png']
   if (!allowedMimeTypes.includes(file.mimetype)) {
-    cb(new Error('Bu resim tipi deseteklenmemektedir.'), false)
+    cb(new Error('This photo type does not supported'), false)
   }
   cb(null, true)
 }
