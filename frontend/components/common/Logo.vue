@@ -1,5 +1,5 @@
 <template>
-  <div class="m-auto hidden rounded-2xl border border-white p-2 md:block">
+  <div class="m-auto hidden rounded-2xl border-2 border-white p-2 md:block">
     <div class="font-poiret text-white" :class="size">DergiLOG</div>
   </div>
   <div class="m-auto block w-fit flex-shrink-0 rounded-2xl border-2 border-white p-2 md:hidden">
