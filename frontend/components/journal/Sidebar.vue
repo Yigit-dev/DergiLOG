@@ -3,7 +3,7 @@ import { useAuthStore } from '~/stores/auth.store'
 </script>
 <template>
   <nav>
-    <Logo size="text-4xl" />
+    <Logo size="text-5xl" />
     <NuxtLink to="/journal/dashboard" class="navigation" active-class="activeClass">
       <Icon name="ph:house-fill" size="32" />
       <span>Home</span>
@@ -57,7 +57,7 @@ export default {
 
 <style scoped>
 nav {
-  @apply justify-center border-r-[1px] border-white p-8 text-white;
+  @apply justify-center border-r-[1px] border-white p-2 text-white md:p-8;
 }
 .navigation {
   @apply mt-8 mb-4 flex items-center justify-center rounded-2xl bg-transparent py-2 px-1 transition duration-200 hover:bg-white hover:text-black md:justify-start;
