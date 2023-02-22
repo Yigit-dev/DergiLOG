@@ -38,6 +38,7 @@ const onSubmit = data => {
               >
                 Login
               </button>
+              <NuxtLink to="/journal/dashboard" class="text-white">go to dashboard</NuxtLink>
               <p class="mt-4 text-sm text-white">
                 Don't have an account?
                 <span class="cursor-pointer underline"><NuxtLink to="/signup">Create Account</NuxtLink></span>
@@ -48,40 +49,4 @@ const onSubmit = data => {
       </div>
     </div>
   </div>
-  <!-- <div class="min-h-screen bg-black">
-    <div class="flex h-full flex-wrap items-center justify-center">
-      <div class="flex items-center justify-center rounded-sm border-2 border-white lg:min-h-screen lg:w-1/2">
-        <h1 class="text-center font-poiret text-8xl text-white">DergiLOG</h1>
-      </div>
-      <div class="flex flex-col items-center justify-center lg:w-1/2">
-        <h2 class="mb-10 text-4xl text-white">Sign In</h2>
-        <form @submit.prevent="onSubmit" class="space-y-5">
-          <input
-            name="login"
-            type="text"
-            placeholder="Username or email address"
-            class="text-md w-full rounded-lg border bg-inherit py-3 px-4 text-white outline-none"
-          />
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            class="text-md w-full rounded-lg border bg-inherit py-3 px-4 text-white outline-none"
-          />
-          <div class="mt-6 text-center">
-            <button
-              type="submit"
-              class="w-48 rounded-lg border border-white bg-inherit py-3 font-semibold text-white transition duration-300 hover:border-black hover:bg-white hover:text-black"
-            >
-              Login
-            </button>
-            <p class="mt-4 text-sm text-white">
-              Don't have an account?
-              <span class="cursor-pointer underline"><NuxtLink to="/signup">Create Account</NuxtLink></span>
-            </p>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div> -->
 </template>
