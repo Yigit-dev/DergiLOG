@@ -575,7 +575,7 @@
         },
         "date": {
           "type": "number",
-          "example": 1677017627359
+          "example": 1677067188321
         },
         "author_id": {
           "$ref": "#/definitions/Author"
@@ -661,7 +661,7 @@
         },
         "date": {
           "type": "number",
-          "example": 1677017627359
+          "example": 1677067188321
         },
         "vote": {
           "type": "number",
