@@ -2,21 +2,27 @@ const Post = require('../models/Post')
 const checkRole = require('../middlewares/checkRoles')
 const APIError = require('../utils/error')
 const Response = require('../utils/response')
-
+const moment = require('moment')
 const createPost = async (req, res) => {
   try {
     checkRole('admin', 'moderator', 'author')
-    userCheck(req.user.role, res)
-    const newPost = await Post.create(req.body)
+    const newPost = await Post.create({
+      ...req.body,
+      date: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+    })
     if (!newPost) {
       throw new APIError('Failed to Create Post')
     }
     return new Response(newPost).created(res)
   } catch (error) {
-    throw new APIError('Failed to Create Post')
+    if (error.name === 'MongoServerError' && error.message.includes('E11000')) {
+      let info = ''
+      if (error.message.includes('slug')) info += 'This Slug Already in Use'
+      return new Response('', info).error500(res)
+    }
+    throw new APIError('Failed to Create Post ww')
   }
 }
-
 const updatePost = async (req, res) => {
   try {
     checkRole('admin', 'moderator', 'author')
