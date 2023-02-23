@@ -143,9 +143,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
           }
         }
       }
@@ -592,7 +589,7 @@
         },
         "date": {
           "type": "number",
-          "example": 1677173010353
+          "example": 1677190332286
         },
         "author_id": {
           "$ref": "#/definitions/Author"
@@ -678,7 +675,7 @@
         },
         "date": {
           "type": "number",
-          "example": 1677173010353
+          "example": 1677190332286
         },
         "vote": {
           "type": "number",
