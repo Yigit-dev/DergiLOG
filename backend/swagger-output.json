@@ -191,6 +191,23 @@
         "responses": {}
       }
     },
+    "/user/refreshToken": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
     "/journal/": {
       "post": {
         "description": "",
@@ -575,7 +592,7 @@
         },
         "date": {
           "type": "number",
-          "example": 1677067188321
+          "example": 1677173010353
         },
         "author_id": {
           "$ref": "#/definitions/Author"
@@ -661,7 +678,7 @@
         },
         "date": {
           "type": "number",
-          "example": 1677067188321
+          "example": 1677173010353
         },
         "vote": {
           "type": "number",

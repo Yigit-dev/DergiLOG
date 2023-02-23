@@ -8,6 +8,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     })
   }
   if (err.name === 'ReferenceError') {
+    console.log(err)
     return res.status(400).json({
       success: false,
       message: 'ReferenceError occurred',

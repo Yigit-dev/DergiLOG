@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { checkToken } = require('../middlewares/auth')
+const { checkToken, refreshToken } = require('../middlewares/auth')
 const checkRoles = require('../middlewares/checkRoles')
 const validate = require('../middlewares/validations/validate')
 const schemas = require('../utils/validations/Joi.validation.user')
@@ -12,6 +12,7 @@ const {
   updateUser,
   deleteUser,
   uploadPhoto,
+  refreshedToken,
 } = require('../controllers/user.controller')
 
 router.get('/', getAllUsers)
@@ -21,5 +22,6 @@ router.post('/login', validate(schemas.loginValidation), userLoggedIn)
 router.post('/uploads', uploadPhoto)
 router.post('/logout', userLoggedOut)
 router.put('/', checkToken, checkRoles('admin', 'user'), validate(schemas.updateValidation), updateUser)
+router.post('/refreshToken', refreshToken, refreshedToken)
 router.delete('/', validate(schemas.deleteValidation), deleteUser)
 module.exports = router

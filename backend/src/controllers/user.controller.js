@@ -64,16 +64,22 @@ const userLoggedIn = async (req, res) => {
     throw new APIError('Email , Password or Username  Incorrect', 210)
   }
 
-  const token = await createToken(user)
-  res.cookie('user_token', token, {
-    httpOnly: true,
-    secure: false,
-  })
+  const { refreshToken, accessToken } = await createToken(user)
+  console.log('refresh FROM LOGİN:' + refreshToken)
+  console.log('access FROM LOGİN:' + accessToken)
+  res
+    .cookie('refresh_token', refreshToken, {
+      httpOnly: true,
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 24,
+      overwrite: true,
+    })
+    .cookie('access_token', accessToken, { httpOnly: true, secure: false, maxAge: 1000 * 60 * 15, overwrite: true })
   return new Response(user, 'Successfully logged in').success(res)
 }
 
 const userLoggedOut = async (req, res) => {
-  await res.clearCookie('user_token')
+  await res.clearCookie('refresh_token').clearCookie('access_token')
   return new Response('', 'Successfully logged out').success(res)
 }
 
@@ -131,6 +137,10 @@ const uploadPhoto = async (req, res) => {
   })
 }
 
+const refreshedToken = async (req, res) => {
+  return new Response(req.accessToken, 'New access token created').success(res)
+}
+
 module.exports = {
   userRegister,
   getAllUsers,
@@ -140,4 +150,5 @@ module.exports = {
   updateUser,
   deleteUser,
   uploadPhoto,
+  refreshedToken,
 }
