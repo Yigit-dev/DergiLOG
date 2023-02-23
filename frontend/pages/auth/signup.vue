@@ -44,16 +44,3 @@ function onSubmit(values) {
     </div>
   </div>
 </template>
-<script>
-export default {
-  methods: {
-    test() {
-      appAxios.post('/user/login', {
-        username: 'yigitcakmak',
-        email: 'yigitcakmakx@gmail.com',
-        password: '123456',
-      })
-    },
-  },
-}
-</script>
