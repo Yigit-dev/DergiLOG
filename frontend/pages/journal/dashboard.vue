@@ -22,14 +22,12 @@ definePageMeta({
       </div>
     </header>
 
-    <h1 class="py-8 text-3xl text-white lg:text-6xl">Last Posts & Journal</h1>
+    <h1 class="py-8 text-3xl text-white lg:text-5xl">Last Posts & Journal</h1>
     <div class="grid-cols grid gap-4 lg:grid-cols-2">
-      <div class="grid-cols grid gap-2 lg:grid-cols-2">
-        <PostCard v-for="i in 4" :key="i" />
+      <div class="grid-cols grid gap-4 lg:grid-cols-1">
+        <PostCard v-for="i in 2" :key="i" />
       </div>
-      <div>
-        <JournalCard />
-      </div>
+      <JournalCard />
     </div>
   </div>
 </template>
