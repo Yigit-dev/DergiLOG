@@ -5,7 +5,7 @@ const PostSchema = new mongoose.Schema({
   slug: { type: String, required: true, unique: true, min: 3, max: 40 },
   description: { type: String, required: true },
   date: { type: Date, required: true, default: Date.now() },
-  author_id: { type: mongoose.Schema.Types.ObjectId },
+  author_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' },
   tags: { type: Array(), required: true },
   category: { type: String, required: true },
   likes: { type: Array() },
