@@ -5,7 +5,7 @@ const createValidation = Joi.object({
   title: Joi.string().required().min(4).max(30),
   slug: Joi.string().required().min(3).max(40),
   description: Joi.string().required(),
-  date: Joi.date().required(),
+  date: Joi.date(),
   author_id: Joi.string().hex().length(24).required(),
   tags: Joi.array().items(Joi.string()).required(),
   category: Joi.string().required(),
