@@ -2,8 +2,6 @@ const { createToken, checkToken } = require('../middlewares/auth')
 const User = require('../models/User')
 const Profile = require('../models/Profile')
 const { hashPassword, comparePassword } = require('../middlewares/bcrypt')
-const upload = require('../middlewares/lib/upload')
-const multer = require('multer')
 const Response = require('../utils/response')
 const APIError = require('../utils/error')
 
@@ -124,19 +122,6 @@ const deleteUser = async (req, res) => {
   return new Response('', 'Successfully Deleted').success(res)
 }
 
-const uploadPhoto = async (req, res) => {
-  upload(req, res, function (err) {
-    if (err instanceof multer.MulterError) {
-      //! Multer status code
-      return new Response('', 'Multer Error').error400(res)
-    } else if (err) {
-      return new Response('', err.message).error400(res)
-    } else {
-      return new Response(req.savedImages, 'Photo Uploaded Successfully').success(res)
-    }
-  })
-}
-
 const refreshedToken = async (req, res) => {
   return new Response(req.accessToken, 'New access token created').success(res)
 }
@@ -149,6 +134,5 @@ module.exports = {
   userLoggedOut,
   updateUser,
   deleteUser,
-  uploadPhoto,
   refreshedToken,
 }

@@ -11,7 +11,6 @@ const {
   getUser,
   updateUser,
   deleteUser,
-  uploadPhoto,
   refreshedToken,
 } = require('../controllers/user.controller')
 
@@ -19,7 +18,6 @@ router.get('/', getAllUsers)
 router.get('/:id', getUser)
 router.post('/register', validate(schemas.registerValidation), userRegister)
 router.post('/login', validate(schemas.loginValidation), userLoggedIn)
-router.post('/uploads', uploadPhoto)
 router.post('/logout', userLoggedOut)
 router.put('/', checkToken, checkRoles('admin', 'user'), validate(schemas.updateValidation), updateUser)
 router.post('/refreshToken', refreshToken, refreshedToken)

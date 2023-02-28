@@ -174,13 +174,6 @@
         }
       }
     },
-    "/user/uploads": {
-      "post": {
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      }
-    },
     "/user/logout": {
       "post": {
         "description": "",
@@ -414,6 +407,18 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "photo": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -588,8 +593,8 @@
           "example": "desc"
         },
         "date": {
-          "type": "number",
-          "example": 1677420170202
+          "type": "string",
+          "example": "12.12.23"
         },
         "author_id": {
           "$ref": "#/definitions/Author"
@@ -674,8 +679,8 @@
           "$ref": "#/definitions/Post"
         },
         "date": {
-          "type": "number",
-          "example": 1677420170202
+          "type": "string",
+          "example": "11.12.23"
         },
         "vote": {
           "type": "number",

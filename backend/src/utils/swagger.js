@@ -97,7 +97,7 @@ const doc = {
       title: 'title',
       slug: 'slug',
       description: 'desc',
-      date: Date.now(),
+      date: '12.12.23',
       $author_id: {
         $ref: '#/definitions/Author',
       },
@@ -124,7 +124,7 @@ const doc = {
       $post_id: {
         $ref: '#/definitions/Post',
       },
-      date: Date.now(),
+      date: '11.12.23',
       vote: 1,
       comment_lists: [],
     },

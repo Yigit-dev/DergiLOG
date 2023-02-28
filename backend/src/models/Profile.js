@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
 
 const profileSchema = new mongoose.Schema({
-  user_id: { type: mongoose.Schema.Types.ObjectId, required: true, unique: true },
+  user_id: [{ type: mongoose.SchemaTypes.ObjectId, required: true, unique: true, ref: 'User' }],
   name: { type: String, required: true, trim: true, min: 3, max: 30 },
   surname: { type: String, required: true, trim: true, min: 3, max: 30 },
   photo: { type: String, required: true },
   gender: { type: String, required: true },
   interests: { type: Array() },
-  subscription_journal: { type: Array() },
-  followed: { type: Array() },
+  subscription_journal: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Journal' }],
+  followed: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'User' }],
 })
 module.exports = new mongoose.model('Profile', profileSchema)
