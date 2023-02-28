@@ -17,7 +17,7 @@ export const useAuthStore = defineStore('Auth', {
         .then(response => {
           this.token = response.data.password
           Cookies.set('token', response.data.password)
-          useRouter().push('/dashboard')
+          useRouter().push('/journal/dashboard')
         })
         .catch(error => {
           throw error
@@ -26,7 +26,7 @@ export const useAuthStore = defineStore('Auth', {
     logout() {
       this.token = null
       Cookies.remove('token')
-      useRouter().push('/login')
+      useRouter().push('/auth/login')
     },
   },
 })

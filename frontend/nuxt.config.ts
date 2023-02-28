@@ -1,6 +1,8 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
+import Icons from 'unplugin-icons/vite'
+
 export default defineNuxtConfig({
-  modules: ['@pinia/nuxt'],
+  modules: ['@pinia/nuxt', 'nuxt-icon'],
   css: ['~/assets/styles/main.css'],
   runtimeConfig: {
     public: {
@@ -13,4 +15,9 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  vite: {
+    plugins: [
+      Icons({ autoInstall: true })
+    ]
+  }
 })
