@@ -2,6 +2,7 @@ const Journal = require('../models/Journal')
 const APIError = require('../utils/error')
 const Response = require('../utils/response')
 const checkRole = require('../middlewares/checkRoles')
+const Post = require('../models/Post')
 
 const journalCreate = async (req, res) => {
   checkRole('admin', 'moderator', 'author')
@@ -46,4 +47,16 @@ const deleteJournal = async (req, res) => {
   }
 }
 
-module.exports = { journalCreate, updateJournal, deleteJournal }
+const addPostToJournal = async (req, res) => {
+  const { id } = req.params
+  try {
+    const journal = await Journal.findById(id, 'post_list')
+    const post = await Post.create(req.body)
+    journal.post_list.push(post)
+    journal.save()
+    return new Response(post, 'Post başarıyla eklendi').success(res)
+  } catch (err) {
+    return new Response(err, 'Post eklenrken hata oldu').error400(res)
+  }
+}
+module.exports = { journalCreate, updateJournal, deleteJournal, addPostToJournal }
