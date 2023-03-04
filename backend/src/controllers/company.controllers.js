@@ -26,18 +26,13 @@ const updatingCompany = async (req, res) => {
   try {
     let { companyName, id } = req.params
     id = mongoose.Types.ObjectId(id)
-    const company = await Company.update(
-      { $and: [{ _id: id }, { company_name: companyName }] },
-      {
-        ...req.body,
-        company_name: req.body.company_name.replace(/ /g, '-'),
-      },
-      {
-        upsert: false,
-      }
-    )
-    if (!company || company.modifiedCount < 1) return new Response('', `${companyName}Not Found`).error500(res)
-    return new Response('', `${companyName} is Updated`).success(res)
+    const company = await Company.findById(id)
+    if (company.company_name === companyName) {
+      await company.updateOne(req.body)
+      await company.save()
+      return new Response('', `${companyName} is Updated`).success(res)
+    }
+    throw new APIError(`  Company not found`)
   } catch (error) {
     console.log(error)
     throw new APIError(`Failed to update Company`)
@@ -47,15 +42,12 @@ const deletingCompany = async (req, res) => {
   try {
     let { companyName, id } = req.params
     id = mongoose.Types.ObjectId(id)
-    const company = await Company.deleteOne(
-      { $and: [{ _id: id }, { company_name: companyName }] },
-      {
-        upsert: false,
-      }
-    )
-    console.log(company)
-    if (!company || company.deletedCount === 0) return new Response(`Failed to delete Company `).error500(res)
-    return new Response('', `Succesfully deleted ${companyName}`).success(res)
+    const company = await Company.findById(id)
+    if (company.company_name === companyName) {
+      await company.deleteOne()
+      return new Response('', `${companyName} is Deleted`).success(res)
+    }
+    throw new APIError(`Company not found.`)
   } catch (error) {
     throw new APIError(`Failed to delete company `)
   }

@@ -3,14 +3,7 @@ const registerValidation = Joi.object({
   role: Joi.string().default('user'),
   username: Joi.string().required().min(6).max(30),
   name: Joi.string().required().min(3).max(30),
-  surname: Joi.string().required().min(3).max(30),
   email: Joi.string().required().email().min(3).max(30),
-  photo: Joi.string().required(),
-  password: Joi.string().required().min(6).max(120),
-  gender: Joi.string().required(),
-  interest: Joi.array().items(Joi.string()),
-  subsciption_journal: Joi.array().items(Joi.string()),
-  followed: Joi.array().items(Joi.string()),
 })
 const loginValidation = Joi.object({
   login: Joi.string().required().min(3).max(30),
