@@ -3,6 +3,8 @@ const Response = require('../utils/response')
 const APIError = require('../utils/error')
 const moment = require('moment')
 const { default: mongoose } = require('mongoose')
+const Journal = require('../models/Journal')
+const Post = require('../models/Post')
 
 const creatingCompany = async (req, res) => {
   try {
@@ -52,5 +54,39 @@ const deletingCompany = async (req, res) => {
     throw new APIError(`Failed to delete company `)
   }
 }
+const getCompanyJournals = async (req, res) => {
+  try {
+    const { companyName } = req.params
+    const company = await Company.findOne({ company_name: companyName })
+    console.log(company)
+    if (!company) return new Response(null, 'Company not found.').error400(res)
+    const id = mongoose.Types.ObjectId(req.user._id)
+    const member = company.company_members.find(member => member.equals(id))
+    console.log('MEMBER:' + member)
+    if (!member) return new Response(null, 'You are not part of this company.').error401(res)
+    const journal = await Journal.find({ company_name: companyName })
+    if (!journal) return new Response(null, 'Journal not found.').error400(res)
+    return new Response(journal, 'Success').success(res)
+  } catch (err) {
+    throw new APIError('APIERROR', 400)
+  }
+}
+const getCompanyPosts = async (req, res) => {
+  try {
+    const { companyName } = req.params
+    const company = await Company.findOne({ company_name: companyName })
+    console.log(company)
+    if (!company) return new Response(null, 'Company not found.').error400(res)
+    const id = mongoose.Types.ObjectId(req.user._id)
+    const member = company.company_members.find(member => member.equals(id))
+    console.log('MEMBER:' + member)
+    if (!member) return new Response(null, 'You are not part of this company.').error401(res)
+    const post = await Post.find({ company_name: companyName })
+    if (!post) return new Response(null, 'Post not found.').error400(res)
+    return new Response(post, 'Success').success(res)
+  } catch (err) {
+    throw new APIError('APIERROR', 400)
+  }
+}
 
-module.exports = { creatingCompany, updatingCompany, deletingCompany }
+module.exports = { creatingCompany, updatingCompany, deletingCompany, getCompanyJournals, getCompanyPosts }

@@ -8,7 +8,7 @@ const getProfile = async (req, res) => {
   try {
     let { id } = req.params
     id = mongoose.Types.ObjectId(id)
-    const user = await Profile.find({ user_id: id }).populate('user_id')
+    const user = await Profile.findOne({ user_id: id }).populate('user_id')
     if (!user) {
       throw new APIError('User Not Found')
     }
