@@ -1,8 +1,12 @@
 <script setup>
+import { useProfileStore } from '~~/stores/profile.store';
 definePageMeta({
   middleware: ['auth'],
   layout: 'dashboard',
 })
+
+const user = useProfileStore()
+user.load()
 </script>
 <template>
   <div>

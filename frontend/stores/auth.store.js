@@ -1,8 +1,10 @@
 import { defineStore } from 'pinia'
 import Cookies from 'js-cookie'
+import { useProfileStore } from './profile.store'
 
 export const useAuthStore = defineStore('Auth', {
   state: () => ({
+    id: Cookies.get("id"),
     token: Cookies.get('token'),
   }),
   actions: {
@@ -15,9 +17,15 @@ export const useAuthStore = defineStore('Auth', {
         },
       })
         .then(response => {
+          this.id = response.data._id
           this.token = response.data.password
+          
+          Cookies.set('id', response.data._id)
           Cookies.set('token', response.data.password)
-          useRouter().push('/journal/dashboard')
+          
+          useProfileStore().load(response.data._id)
+          
+          useRouter().push('/journal')
         })
         .catch(error => {
           throw error
@@ -25,7 +33,9 @@ export const useAuthStore = defineStore('Auth', {
     },
     logout() {
       this.token = null
+      this.id = ""
       Cookies.remove('token')
+      useProfileStore().clearProfile()
       useRouter().push('/auth/login')
     },
   },

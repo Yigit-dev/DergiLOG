@@ -4,7 +4,7 @@ import { useAuthStore } from '~/stores/auth.store'
 <template>
   <nav>
     <Logo size="text-5xl" />
-    <NuxtLink to="/journal/dashboard" class="navigation" active-class="activeClass">
+    <NuxtLink to="/journal" class="navigation" active-class="activeClass">
       <Icon name="ph:house-fill" size="32" />
       <span>Home</span>
     </NuxtLink>
