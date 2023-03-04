@@ -1,6 +1,8 @@
 const Joi = require('joi')
 
 const createValidation = Joi.object({
+  company_id: Joi.string().hex().length(24),
+  company_name: Joi.string().required(),
   cover: Joi.string().required().min(4).max(30),
   title: Joi.string().required().min(4).max(30),
   slug: Joi.string().required().min(3).max(40),
@@ -15,6 +17,8 @@ const createValidation = Joi.object({
   content: Joi.string().required().min(10),
 })
 const updateValidation = Joi.object({
+  company_id: Joi.string().hex().length(24),
+  company_name: Joi.string(),
   post_id: Joi.string().hex().length(24),
   cover: Joi.string().min(4).max(30),
   title: Joi.string().min(4).max(30),
