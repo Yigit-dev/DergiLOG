@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const JournalSchema = new mongoose.Schema({
+  company_id: { type: mongoose.Schema.Types.ObjectId, required: true },
+  company_name: { type: String },
   admin_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Admin' },
   moderator_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Moderator' },
   author_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Author' },

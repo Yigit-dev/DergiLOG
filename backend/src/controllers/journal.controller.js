@@ -9,6 +9,7 @@ const journalCreate = async (req, res) => {
   const count = await Journal.find({}).count()
   let info = {
     ...req.body,
+    company_name: req.body.company_name.replace(/ /g, '-'),
     admin_id: req.user._id,
     moderator_id: req.user._id,
     author_id: req.user._id,
