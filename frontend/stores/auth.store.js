@@ -1,40 +1,45 @@
 import { defineStore } from 'pinia'
-import Cookies from 'js-cookie'
 import { useProfileStore } from './profile.store'
 
 export const useAuthStore = defineStore('Auth', {
   state: () => ({
-    id: Cookies.get("id"),
-    token: Cookies.get('token'),
+    profileId: "",
+    refresh_token: "",
+    access_token: ""
   }),
   actions: {
+    async loggedIn(){
+      useFetch('/api/user/login').then(res => {
+        this.refresh_token = res.data.value.refresh_token
+        this.access_token =  res.data.value.access_token  
+        if(this.refresh_token){
+          useRouter().push('/journal')
+        }
+      })
+    },
     async login(login, password) {
-      await $fetch('http://localhost:3000/user/login', {
+      await $fetch('/proxy/user/login', {
         method: 'POST',
         body: { login, password },
         headers: {
           'x-api-key': useRuntimeConfig().API_KEY,
-        },
+        }
+      }).then(response => {
+        this.$state.profileId = response.data._id 
+        useProfileStore().load(response.data._id)
+        this.loggedIn()
       })
-        .then(response => {
-          this.id = response.data._id
-          this.token = response.data.password
-          
-          Cookies.set('id', response.data._id)
-          Cookies.set('token', response.data.password)
-          
-          useProfileStore().load(response.data._id)
-          
-          useRouter().push('/journal')
-        })
-        .catch(error => {
-          throw error
-        })
+      .catch(error => {
+        throw error
+      })
     },
-    logout() {
-      this.token = null
-      this.id = ""
-      Cookies.remove('token')
+    async logout() {
+      await $fetch('/proxy/user/logout', {
+        method: 'POST',
+        headers: {
+          'x-api-key': useRuntimeConfig().API_KEY,
+        }
+      })
       useProfileStore().clearProfile()
       useRouter().push('/auth/login')
     },

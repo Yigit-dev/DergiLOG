@@ -6,6 +6,7 @@ const onSubmit = data => {
   const { login, password } = Object.fromEntries(new FormData(data.target))
   return authStore.login(login, password).catch(error => console.error(error))
 }
+
 </script>
 <template>
   <div class="min-h-screen bg-black">
@@ -38,7 +39,7 @@ const onSubmit = data => {
               >
                 Login
               </button>
-              <NuxtLink to="/journal" class="text-white">go to dashboard</NuxtLink>
+              <NuxtLink to="/journal">dashobard</NuxtLink>
               <p class="mt-4 text-sm text-white">
                 Don't have an account?
                 <span class="cursor-pointer underline"><NuxtLink to="/signup">Create Account</NuxtLink></span>

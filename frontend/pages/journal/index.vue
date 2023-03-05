@@ -4,8 +4,9 @@ definePageMeta({
   middleware: ['auth'],
   layout: 'dashboard',
 })
-await useProfileStore().load(useAuthStore().$state.id)
-const profile = useProfileStore().$state.profile
+
+/* await useProfileStore().load(useAuthStore().$state.profileId)
+const profile = useProfileStore().$state.profile */
 </script>
 <template>
   <div>

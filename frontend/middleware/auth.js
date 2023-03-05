@@ -1,8 +1,9 @@
-import Cookies from 'js-cookie'
-
-export default defineNuxtRouteMiddleware(to => {
-  const token = Cookies.get('token')
-  if (to.name !== '/auth/login' && !token) {
-    return navigateTo('/auth/login')
+import { useAuthStore } from "~~/stores"
+export default defineNuxtRouteMiddleware(async (to, from) => {
+  await useFetch('/api/user/login').then(res => {
+    useAuthStore().$state.refresh_token =  res.data.value.refresh_token
+  })
+  if(to.name !== '/auth/login' && !useAuthStore().$state.refresh_token){
+    return navigateTo("/auth/login")
   }
 })
