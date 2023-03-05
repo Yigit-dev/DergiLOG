@@ -1,8 +1,11 @@
 <script setup>
+import { useCompanyStore } from '~~/stores';
+
 definePageMeta({
   middleware: ['auth'],
   layout: 'dashboard',
 })
+useCompanyStore().loadJournal()
 </script>
 <template>
   <div>
