@@ -1,5 +1,5 @@
 <script setup>
-import { useAuthStore, useProfileStore } from '~~/stores';
+import { useAuthStore, useProfileStore } from '~~/stores'
 const profile = useProfileStore().$state.profile
 </script>
 <template>

@@ -1,12 +1,12 @@
 <script setup>
-import { useAuthStore, useProfileStore } from '~~/stores';
+import { useAuthStore, useProfileStore } from '~~/stores'
 definePageMeta({
   middleware: ['auth'],
   layout: 'dashboard',
 })
-
-/* await useProfileStore().load(useAuthStore().$state.profileId)
-const profile = useProfileStore().$state.profile */
+await useAuthStore().loggedIn()
+await useProfileStore().load(useAuthStore().$state.profileId)
+const profile = useProfileStore().$state.profile
 </script>
 <template>
   <div>
@@ -35,7 +35,7 @@ import Stats from '~~/components/journal/Stats.vue'
 import Welcome from '~~/components/journal/Welcome.vue'
 import PostCard from '~~/components/journal/PostCard.vue'
 import JournalCard from '~~/components/journal/JournalCard.vue'
-export default{
-  components:{Stats, Welcome, PostCard, JournalCard}
+export default {
+  components: { Stats, Welcome, PostCard, JournalCard },
 }
 </script>
