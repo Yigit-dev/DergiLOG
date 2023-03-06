@@ -2,19 +2,8 @@
 import Icons from 'unplugin-icons/vite'
 
 export default defineNuxtConfig({
-  modules: ['@pinia/nuxt', 'nuxt-icon', '@nuxtjs-alt/proxy'],
+  modules: ['@pinia/nuxt', 'nuxt-icon'],
   css: ['~/assets/styles/main.css'],
-  proxy: {
-    enableProxy: true,
-    fetch: true,
-    proxies: {
-      '/proxy': {
-        target: 'http://localhost:3000',
-        changeOrigin: true,
-        rewrite: path => path.replace(/^\/proxy/, '')
-      }
-    }
-  },
   runtimeConfig: {
     public: {
       API_KEY: process.env.API_KEY,
@@ -27,8 +16,6 @@ export default defineNuxtConfig({
     },
   },
   vite: {
-    plugins: [
-      Icons({ autoInstall: true })
-    ]
-  }
+    plugins: [Icons({ autoInstall: true })],
+  },
 })

@@ -70,12 +70,18 @@ const userLoggedIn = async (req, res) => {
   console.log('access FROM LOGİN:' + accessToken)
   res
     .cookie('refresh_token', refreshToken, {
-      httpOnly: true,
+      httpOnly: false,
       secure: false,
       maxAge: 1000 * 60 * 60 * 24,
       overwrite: true,
     })
-    .cookie('access_token', accessToken, { httpOnly: true, secure: false, maxAge: 1000 * 60 * 15, overwrite: true })
+    .cookie('access_token', accessToken, { httpOnly: false, secure: false, maxAge: 1000 * 60 * 15, overwrite: true })
+    .cookie('user_id', user.id, {
+      httpOnly: false,
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 24,
+      overwrite: true,
+    })
   return new Response(user, 'Successfully logged in').success(res)
 }
 

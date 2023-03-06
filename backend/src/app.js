@@ -15,7 +15,12 @@ const swaggerUi = require('swagger-ui-express')
 const swaggerOutput = require('../swagger-output.json')
 const swaggerFile = require('../src/utils/swagger')
 
-app.use(cors())
+app.use(
+  cors({
+    origin: 'http://localhost:5000',
+    credentials: true,
+  })
+)
 app.use(helmet())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

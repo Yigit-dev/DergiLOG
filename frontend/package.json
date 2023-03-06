@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --port=5000",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -11,7 +11,7 @@
     "autoprefixer": "^10.4.13",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "nuxt": "^3.2.0",
+    "nuxt": "^3.2.3",
     "nuxt-icon": "^0.3.2",
     "postcss": "^8.4.21",
     "prettier": "^2.8.4",
@@ -23,7 +23,6 @@
     "vue": "latest"
   },
   "dependencies": {
-    "@nuxtjs-alt/proxy": "^2.1.2",
     "@pinia/nuxt": "^0.4.6",
     "h3": "^1.5.0",
     "pinia": "^2.0.30"
