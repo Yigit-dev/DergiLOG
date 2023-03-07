@@ -36,17 +36,19 @@ const updateUser = async (req, res) => {
   }
 }
 const uploadPhoto = async (req, res, next) => {
-  upload(req, res, function (err) {
-    if (err instanceof multer.MulterError) {
-      //! Multer status code
-      return new Response('', 'Multer Error').error400(res)
-    } else if (err) {
-      return new Response('', err.message).error400(res)
-    } else {
-      if (req.files[0].filename) req.body.photo = req.files[0].filename
-      next()
-    }
-  })
+  if (req.files) {
+    upload(req, res, function (err) {
+      if (err instanceof multer.MulterError) {
+        //! Multer status code
+        return new Response('', 'Multer Error').error400(res)
+      } else if (err) {
+        return new Response('', err.message).error400(res)
+      } else {
+        if (req.files[0].filename) req.body.photo = req.files[0].filename
+        next()
+      }
+    })
+  } else next()
 }
 
 module.exports = { updateUser, getProfile, uploadPhoto }
