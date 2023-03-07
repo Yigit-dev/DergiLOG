@@ -1,12 +1,8 @@
 <script setup>
-import { useAuthStore, useProfileStore } from '~~/stores'
 definePageMeta({
   middleware: ['auth'],
   layout: 'dashboard',
 })
-await useAuthStore().loggedIn()
-await useProfileStore().load(useAuthStore().$state.profileId)
-const profile = useProfileStore().$state.profile
 </script>
 <template>
   <div>
