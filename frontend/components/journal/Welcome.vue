@@ -1,5 +1,12 @@
 <script setup>
-import { useAuthStore, useProfileStore } from '~~/stores'
+import { useProfileStore } from '~~/stores'
+
+if (useProfileStore().$state.profile._id === undefined) {
+  await useFetch('/api/user/login').then(async res => {
+    let profileId = res.data.value.user_id
+    await useProfileStore().loadFromDatabase(profileId)
+  })
+}
 const profile = useProfileStore().$state.profile
 </script>
 <template>

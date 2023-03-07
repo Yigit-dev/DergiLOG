@@ -10,11 +10,10 @@ export const useAuthStore = defineStore('Auth', {
   actions: {
     async loggedIn() {
       await useFetch('/api/user/login').then(res => {
-        console.log(res)
         this.refresh_token = res.data.value.refresh_token
         this.access_token = res.data.value.access_token
         this.profileId = res.data.value.user_id
-        useProfileStore().load(res.data.value.user_id)
+
         if (this.refresh_token) {
           useRouter().push('/journal')
         }
@@ -29,20 +28,18 @@ export const useAuthStore = defineStore('Auth', {
           'x-api-key': useRuntimeConfig().API_KEY,
         },
         credentials: 'include',
+      }).then(res => {
+        useProfileStore().load(res.data)
       })
-        .then(response => {
-          this.loggedIn()
-        })
-        .catch(error => {
-          throw error
-        })
+      this.loggedIn()
     },
-    async loadProfile() {},
+
     async loggedOut() {
       await useFetch('/api/user/logout').then(res => {
         console.log(res)
       })
     },
+
     async logout() {
       await $fetch('http://localhost:3000/user/logout', {
         method: 'POST',

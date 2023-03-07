@@ -2,7 +2,7 @@
 import Icons from 'unplugin-icons/vite'
 
 export default defineNuxtConfig({
-  modules: ['@pinia/nuxt', 'nuxt-icon'],
+  modules: ['@pinia/nuxt', 'nuxt-icon', '@nuxt/devtools'],
   css: ['~/assets/styles/main.css'],
   runtimeConfig: {
     public: {
