@@ -3,7 +3,7 @@ const APIError = require('../utils/error')
 const Response = require('../utils/response')
 const checkRole = require('../middlewares/checkRoles')
 const Post = require('../models/Post')
-
+const moment = require('moment')
 const journalCreate = async (req, res) => {
   checkRole('admin', 'moderator', 'author')
   const count = await Journal.find({}).count()
@@ -52,12 +52,15 @@ const addPostToJournal = async (req, res) => {
   const { id } = req.params
   try {
     const journal = await Journal.findById(id, 'post_list')
-    const post = await Post.create(req.body)
+    const post = await Post.create({ ...req.body, date: moment(new Date()).format('YYYY-MM-DD HH:mm:ss') })
     journal.post_list.push(post)
     journal.save()
     return new Response(post, 'Post başarıyla eklendi').success(res)
   } catch (err) {
-    return new Response(err, 'Post eklenrken hata oldu').error400(res)
+    if (err.name === 'MongoServerError' && err.message.includes('E11000')) {
+      return new Response('', 'Slug dublicated').dubllicateErr(res)
+    }
+    return new Response(err, 'Post eklenirken hata oldu').error400(res)
   }
 }
 module.exports = { journalCreate, updateJournal, deleteJournal, addPostToJournal }

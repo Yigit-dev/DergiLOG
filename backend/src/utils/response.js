@@ -51,5 +51,12 @@ class Response {
       message: this.message || 'Internal Server Error',
     })
   }
+  dubllicateErr(res) {
+    return res.status(500).json({
+      success: false,
+      data: this.data,
+      message: this.message || 'Something Dublicated!! ',
+    })
+  }
 }
 module.exports = Response
