@@ -13,10 +13,7 @@
       "description": "Endpoints"
     }
   ],
-  "schemes": [
-    "http",
-    "https"
-  ],
+  "schemes": ["http", "https"],
   "securityDefinitions": {
     "apiKeyAuth": {
       "type": "apiKey",
@@ -31,12 +28,8 @@
       "description": "Input example:Bearer JWT_TOKEN"
     }
   },
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
   "paths": {
     "/company/": {
       "post": {
@@ -189,42 +182,6 @@
         ],
         "responses": {}
       },
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                },
-                "username": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      },
       "delete": {
         "description": "",
         "parameters": [
@@ -252,17 +209,19 @@
             }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
+        "responses": {}
       }
     },
-    "/user/{id}": {
+    "/user/{username}/{id}": {
       "get": {
         "description": "",
         "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "id",
             "in": "path",
@@ -597,10 +556,16 @@
         "responses": {}
       }
     },
-    "/profile/{id}": {
+    "/profile/{username}/{id}": {
       "get": {
         "description": "",
         "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "id",
             "in": "path",
@@ -618,6 +583,12 @@
       "put": {
         "description": "",
         "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "id",
             "in": "path",
@@ -685,10 +656,7 @@
           "$ref": "#/definitions/Journal"
         }
       },
-      "required": [
-        "user_id",
-        "journal_id"
-      ]
+      "required": ["user_id", "journal_id"]
     },
     "Journal": {
       "type": "object",
@@ -726,11 +694,7 @@
           "example": false
         }
       },
-      "required": [
-        "admin_id",
-        "moderator_id",
-        "author_id"
-      ]
+      "required": ["admin_id", "moderator_id", "author_id"]
     },
     "Author": {
       "type": "object",
@@ -764,11 +728,7 @@
           "items": {}
         }
       },
-      "required": [
-        "user_id",
-        "journal_id",
-        "admin_id"
-      ]
+      "required": ["user_id", "journal_id", "admin_id"]
     },
     "Moderator": {
       "type": "object",
@@ -788,11 +748,7 @@
           "$ref": "#/definitions/Admin"
         }
       },
-      "required": [
-        "user_id",
-        "journal_id",
-        "admin_id"
-      ]
+      "required": ["user_id", "journal_id", "admin_id"]
     },
     "Post": {
       "type": "object",
@@ -847,9 +803,7 @@
           "example": "content"
         }
       },
-      "required": [
-        "author_id"
-      ]
+      "required": ["author_id"]
     },
     "Profile": {
       "type": "object",
@@ -889,9 +843,7 @@
           "items": {}
         }
       },
-      "required": [
-        "user_id"
-      ]
+      "required": ["user_id"]
     },
     "Thread": {
       "type": "object",
@@ -913,9 +865,7 @@
           "items": {}
         }
       },
-      "required": [
-        "post_id"
-      ]
+      "required": ["post_id"]
     }
   },
   "security": [

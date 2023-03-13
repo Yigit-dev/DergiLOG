@@ -9,5 +9,7 @@ const profileSchema = new mongoose.Schema({
   interests: { type: Array() },
   subscription_journal: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Journal' }],
   followed: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'User' }],
+  followers: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'User' }],
+  liked_post: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Post' }],
 })
 module.exports = new mongoose.model('Profile', profileSchema)
