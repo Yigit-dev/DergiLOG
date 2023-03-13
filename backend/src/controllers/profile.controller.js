@@ -6,10 +6,10 @@ const multer = require('multer')
 const upload = require('../middlewares/lib/upload')
 const getProfile = async (req, res) => {
   try {
-    let { id } = req.params
+    let { id, username } = req.params
     id = mongoose.Types.ObjectId(id)
     const user = await Profile.findOne({ user_id: id }).populate('user_id')
-    if (!user) {
+    if (!user || user.username !== username) {
       throw new APIError('User Not Found')
     }
     return new Response(user).success(res)
@@ -20,24 +20,24 @@ const getProfile = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    let { id } = req.params
+    let { id, username } = req.params
     let objectId = mongoose.Types.ObjectId(id)
-
-    const user = await Profile.findOneAndUpdate({ user_id: objectId }, req.body).populate('user_id')
-
+    const user = await Profile.findOne({ user_id: objectId }).populate('user_id')
     console.log(user)
-    if (!user) {
+    if (!user || user.user_id.username != username) {
       throw new APIError('User Not Found')
     }
-    return new Response('', 'Successfully Updated Profile').success(res)
+    await user.updateOne(req.body, { new: true })
+    await user.save()
+    return new Response(user, 'Successfully Updated Profile').success(res)
   } catch (error) {
     console.log(error)
     throw new APIError('Failed to Update Profile')
   }
 }
 const uploadPhoto = async (req, res, next) => {
-  if (req.files) {
-    upload(req, res, function (err) {
+  upload(req, res, function (err) {
+    if (req.files) {
       if (err instanceof multer.MulterError) {
         //! Multer status code
         return new Response('', 'Multer Error').error400(res)
@@ -45,10 +45,10 @@ const uploadPhoto = async (req, res, next) => {
         return new Response('', err.message).error400(res)
       } else {
         if (req.files[0].filename) req.body.photo = req.files[0].filename
-        next()
       }
-    })
-  } else next()
+    }
+    next()
+  })
 }
 
 module.exports = { updateUser, getProfile, uploadPhoto }
