@@ -8,7 +8,9 @@ const createPost = async (req, res) => {
     checkRole('admin', 'moderator', 'author')
     const newPost = await Post.create({
       ...req.body,
+      company_name: req.body.company_name.replace(/ /g, '-'),
       date: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+      company_id: req.user.id,
     })
     if (!newPost) {
       throw new APIError('Failed to Create Post')
@@ -16,10 +18,9 @@ const createPost = async (req, res) => {
     return new Response(newPost).created(res)
   } catch (error) {
     if (error.name === 'MongoServerError' && error.message.includes('E11000')) {
-      let info = ''
-      if (error.message.includes('slug')) info += 'This Slug Already in Use'
-      return new Response('', info).error500(res)
+      return new Response('', 'This Slug Already in Use').dubllicateErr(res)
     }
+    console.log(error)
     throw new APIError('Failed to Create Post ww')
   }
 }

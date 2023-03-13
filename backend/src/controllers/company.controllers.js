@@ -30,7 +30,10 @@ const updatingCompany = async (req, res) => {
     id = mongoose.Types.ObjectId(id)
     const company = await Company.findById(id)
     if (company.company_name === companyName) {
-      await company.updateOne(req.body)
+      await company.updateOne({
+        ...req.body,
+        company_name: req.body.company_name.replace(/ /g, '-'),
+      })
       await company.save()
       return new Response('', `${companyName} is Updated`).success(res)
     }

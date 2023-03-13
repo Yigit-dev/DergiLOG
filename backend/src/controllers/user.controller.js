@@ -41,12 +41,11 @@ const userRegister = async (req, res) => {
 
     return new Response(newUser, userProfile).created(res)
   } catch (error) {
-    console.log(error)
     if (error.name === 'MongoServerError' && error.message.includes('E11000')) {
       let info = ''
       if (error.message.includes('email')) info += 'This Email Already in Use'
       if (error.message.includes('username')) info += 'This Username Already in Use'
-      return new Response('', info).error500(res)
+      return new Response('', info).dubllicateErr(res)
     }
     console.log(error)
     throw new APIError('Failed to Create User')
