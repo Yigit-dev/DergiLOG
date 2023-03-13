@@ -15,9 +15,9 @@ const getAllUsers = async (req, res) => {
 
 const getUser = async (req, res) => {
   try {
-    const { id } = req.params
+    const { id, username } = req.params
     const user = await User.findById(id)
-    if (!user) {
+    if (!user || user.username !== username) {
       throw new APIError('User Not Found')
     }
     return new Response(user).success(res)
@@ -89,33 +89,6 @@ const userLoggedOut = async (req, res) => {
   return new Response('', 'Successfully logged out').success(res)
 }
 
-const updateUser = async (req, res) => {
-  //! Updated only username email password
-
-  const { email, password, username } = req.body
-  const hash = await hashPassword(password, res)
-  const user = await User.findOneAndUpdate(
-    { email },
-    {
-      ...req.body,
-      password: hash,
-    }
-  )
-
-  if (!user) {
-    throw new APIError('Email , Password or Username  Incorrect', 210)
-  }
-
-  if (!user._id.equals(req.user._id)) throw new APIError('Invalid Token', 210)
-
-  const comparePass = await comparePassword(password, user.password, res)
-
-  if ((username !== undefined && user.username !== username) || !comparePass) {
-    throw new APIError('Email , Password or Username  Incorrect', 210)
-  }
-  return new Response('', 'Successsfully Updated').success(res)
-}
-
 const deleteUser = async (req, res) => {
   const { email, password, username } = req.body
   const user = await User.findOneAndRemove({ email })
@@ -140,7 +113,6 @@ module.exports = {
   getUser,
   userLoggedIn,
   userLoggedOut,
-  updateUser,
   deleteUser,
   refreshedToken,
 }
