@@ -4,7 +4,7 @@ const PostSchema = new mongoose.Schema({
   company_name: { type: String },
   cover: { type: String, required: true, min: 4, max: 30 },
   title: { type: String, required: true, min: 4, max: 30 },
-  slug: { type: String, required: true, unique: true, min: 3, max: 40 },
+  slug: { type: String, unique: true, min: 4 },
   description: { type: String, required: true },
   date: { type: Date, required: true, default: Date.now() },
   author_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' },
