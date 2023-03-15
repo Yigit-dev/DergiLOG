@@ -6,8 +6,9 @@ const createValidation = Joi.object({
 })
 const updateValidation = Joi.object({
   company_id: Joi.string().hex().length(24),
-  company_name: Joi.string(),
   admin_id: Joi.string().hex().length(24),
+  journal_name: Joi.string().min(4).max(30),
+  cover: Joi.string(),
   moderator_id: Joi.string().hex().length(24),
   author_id: Joi.string().hex().length(24),
   post_list: Joi.array().items(Joi.string()),
