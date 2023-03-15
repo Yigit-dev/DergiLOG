@@ -13,7 +13,10 @@
       "description": "Endpoints"
     }
   ],
-  "schemes": ["http", "https"],
+  "schemes": [
+    "http",
+    "https"
+  ],
   "securityDefinitions": {
     "apiKeyAuth": {
       "type": "apiKey",
@@ -28,8 +31,12 @@
       "description": "Input example:Bearer JWT_TOKEN"
     }
   },
-  "consumes": ["application/json"],
-  "produces": ["application/json"],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "paths": {
     "/company/": {
       "post": {
@@ -423,6 +430,31 @@
         }
       }
     },
+    "/post/{slug}/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
     "/post/": {
       "post": {
         "description": "",
@@ -438,7 +470,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "company_name": {
+                "title": {
                   "example": "any"
                 }
               }
@@ -656,7 +688,10 @@
           "$ref": "#/definitions/Journal"
         }
       },
-      "required": ["user_id", "journal_id"]
+      "required": [
+        "user_id",
+        "journal_id"
+      ]
     },
     "Journal": {
       "type": "object",
@@ -694,7 +729,11 @@
           "example": false
         }
       },
-      "required": ["admin_id", "moderator_id", "author_id"]
+      "required": [
+        "admin_id",
+        "moderator_id",
+        "author_id"
+      ]
     },
     "Author": {
       "type": "object",
@@ -728,7 +767,11 @@
           "items": {}
         }
       },
-      "required": ["user_id", "journal_id", "admin_id"]
+      "required": [
+        "user_id",
+        "journal_id",
+        "admin_id"
+      ]
     },
     "Moderator": {
       "type": "object",
@@ -748,7 +791,11 @@
           "$ref": "#/definitions/Admin"
         }
       },
-      "required": ["user_id", "journal_id", "admin_id"]
+      "required": [
+        "user_id",
+        "journal_id",
+        "admin_id"
+      ]
     },
     "Post": {
       "type": "object",
@@ -803,7 +850,9 @@
           "example": "content"
         }
       },
-      "required": ["author_id"]
+      "required": [
+        "author_id"
+      ]
     },
     "Profile": {
       "type": "object",
@@ -843,7 +892,9 @@
           "items": {}
         }
       },
-      "required": ["user_id"]
+      "required": [
+        "user_id"
+      ]
     },
     "Thread": {
       "type": "object",
@@ -865,7 +916,9 @@
           "items": {}
         }
       },
-      "required": ["post_id"]
+      "required": [
+        "post_id"
+      ]
     }
   },
   "security": [

@@ -3,14 +3,30 @@ const checkRole = require('../middlewares/checkRoles')
 const APIError = require('../utils/error')
 const Response = require('../utils/response')
 const moment = require('moment')
+const Company = require('../models/Company')
+const { default: mongoose } = require('mongoose')
+
+const getPost = async (req, res) => {
+  const post = await Post.findOne({ _id: req.params.id })
+  if (!post || post.slug != req.params.slug) {
+    return new Response(null, 'Böyle bir post bulunamadı').error400(res)
+  } else {
+    return new Response(post).success(res)
+  }
+}
+
 const createPost = async (req, res) => {
   try {
     checkRole('admin', 'moderator', 'author')
+    const company = await Company.findOne({ company_members: { $elemMatch: { $eq: req.user.id } } })
+    if (!company) return new Response('', 'You are not part of any company').error400(res)
     const newPost = await Post.create({
       ...req.body,
-      company_name: req.body.company_name.replace(/ /g, '-'),
-      date: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-      company_id: req.user.id,
+      company_name: company.company_name,
+      slug: req.body.title.replace(/ /g, '-'),
+      date: moment().format('YYYY-MM-DD HH:mm:ss'),
+      company_id: mongoose.Types.ObjectId(company.id),
+      author_id: mongoose.Types.ObjectId(req.user.id),
     })
     if (!newPost) {
       throw new APIError('Failed to Create Post')
@@ -57,4 +73,5 @@ module.exports = {
   createPost,
   updatePost,
   deletePost,
+  getPost,
 }
