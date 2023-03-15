@@ -353,7 +353,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "company_name": {
+                "journal_name": {
                   "example": "any"
                 }
               }
