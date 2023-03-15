@@ -7,11 +7,12 @@ const { checkToken } = require('../middlewares/auth')
 const profileRoutes = require('../routes/profile.routes')
 const checkApiKey = require('../middlewares/checkApiKey')
 const companyRoutes = require('../routes/company.routes')
-
+const adminRoutes = require('../routes/admin.routes')
 router.use('/company', checkApiKey, checkToken, companyRoutes)
 router.use('/user', checkApiKey, userRoutes)
 router.use('/journal', checkApiKey, checkToken, journalRoutes)
 router.use('/post', checkApiKey, checkToken, postRoutes)
 router.use('/timeline', checkApiKey, timelineRoutes)
 router.use('/profile', checkApiKey, profileRoutes)
+router.use('/admin', checkToken, adminRoutes)
 module.exports = router

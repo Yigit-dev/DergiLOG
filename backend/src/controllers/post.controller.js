@@ -24,7 +24,7 @@ const createPost = async (req, res) => {
       ...req.body,
       company_name: company.company_name,
       slug: req.body.title.replace(/ /g, '-'),
-      date: moment().format('YYYY-MM-DD HH:mm:ss'),
+      date: new Date(moment().format('YYYY-MM-DD HH:mm:ss')),
       company_id: mongoose.Types.ObjectId(company.id),
       author_id: mongoose.Types.ObjectId(req.user.id),
     })

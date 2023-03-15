@@ -2,11 +2,11 @@ const mongoose = require('mongoose')
 const PostSchema = new mongoose.Schema({
   company_id: { type: mongoose.Schema.Types.ObjectId, required: true },
   company_name: { type: String },
-  cover: { type: String, required: true, min: 4, max: 30 },
+  cover: { type: String },
   title: { type: String, required: true, min: 4, max: 30 },
   slug: { type: String, unique: true, min: 4 },
   description: { type: String, required: true },
-  date: { type: Date, required: true, default: Date.now() },
+  date: { type: String, required: true },
   author_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' },
   tags: { type: Array(), required: true },
   category: { type: String, required: true },
