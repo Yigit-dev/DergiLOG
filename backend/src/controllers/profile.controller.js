@@ -6,10 +6,10 @@ const multer = require('multer')
 const upload = require('../middlewares/lib/upload')
 const getProfile = async (req, res) => {
   try {
-    let { id, username } = req.params
+    let { id } = req.params
     id = mongoose.Types.ObjectId(id)
     const user = await Profile.findOne({ user_id: id }).populate('user_id')
-    if (!user || user.username !== username) {
+    if (!user) {
       throw new APIError('User Not Found')
     }
     return new Response(user).success(res)
@@ -20,15 +20,13 @@ const getProfile = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    let { id, username } = req.params
+    let { id } = req.params
     let objectId = mongoose.Types.ObjectId(id)
-    const user = await Profile.findOne({ user_id: objectId }).populate('user_id')
-    console.log(user)
-    if (!user || user.user_id.username != username) {
+    const user = await Profile.findOneAndUpdate({ user_id: objectId }, req.body).populate('user_id')
+
+    if (!user) {
       throw new APIError('User Not Found')
     }
-    await user.updateOne(req.body, { new: true })
-    await user.save()
     return new Response('', 'Successfully Updated Profile').success(res)
   } catch (error) {
     console.log(error)

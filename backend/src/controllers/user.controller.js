@@ -4,7 +4,7 @@ const Profile = require('../models/Profile')
 const { hashPassword, comparePassword } = require('../middlewares/bcrypt')
 const Response = require('../utils/response')
 const APIError = require('../utils/error')
-
+const Company = require('../models/Company')
 const getAllUsers = async (req, res) => {
   const users = await User.find({})
   if (!users || users.length == 0) {
@@ -63,7 +63,11 @@ const userLoggedIn = async (req, res) => {
   if (!comparePass) {
     throw new APIError('Email , Password or Username  Incorrect', 210)
   }
-
+  const member = await Company.findOne({ company_members: { $all: user._id } }).select('_id company_name')
+  let info = {
+    user: user,
+    company_info: member,
+  }
   const { refreshToken, accessToken } = await createToken(user)
   console.log('refresh FROM LOGİN:' + refreshToken)
   console.log('access FROM LOGİN:' + accessToken)
@@ -81,7 +85,7 @@ const userLoggedIn = async (req, res) => {
       maxAge: 1000 * 60 * 60 * 24,
       overwrite: true,
     })
-  return new Response(user, 'Successfully logged in').success(res)
+  return new Response(info, 'Successfully logged in').success(res)
 }
 
 const userLoggedOut = async (req, res) => {
