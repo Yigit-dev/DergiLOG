@@ -4,6 +4,7 @@ const APIError = require('../utils/error')
 const Response = require('../utils/response')
 const multer = require('multer')
 const upload = require('../middlewares/lib/upload')
+const Company = require('../models/Company')
 const getProfile = async (req, res) => {
   try {
     let { id } = req.params
@@ -12,7 +13,12 @@ const getProfile = async (req, res) => {
     if (!user) {
       throw new APIError('User Not Found')
     }
-    return new Response(user).success(res)
+    const member = await Company.findOne({ company_members: { $all: id } }).select('_id company_name')
+    let info = {
+      user: user,
+      company_info: member,
+    }
+    return new Response(info).success(res)
   } catch (error) {
     throw new APIError('User Not Found')
   }
