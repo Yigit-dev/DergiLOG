@@ -2,18 +2,29 @@ const Journal = require('../models/Journal')
 const APIError = require('../utils/error')
 const Response = require('../utils/response')
 const checkRole = require('../middlewares/checkRoles')
+const Company = require('../models/Company')
 const Post = require('../models/Post')
 const moment = require('moment')
+const { default: mongoose } = require('mongoose')
+
 const journalCreate = async (req, res) => {
   checkRole('admin', 'moderator', 'author')
-  const count = await Journal.find({}).count()
+  const company = await Company.findOne({ company_members: { $elemMatch: { $eq: req.user.id } } })
+  if (!company) return new Response('', 'You are not part of any company').error400(res)
+
+  const isJournalExist = await Journal.find({ company_id: company.id, journal_name: req.body.journal_name })
+  let num
+  if (!isJournalExist) {
+    num = 1
+  } else {
+    num = isJournalExist[isJournalExist.length - 1].journal_num + 1
+  }
+
   let info = {
     ...req.body,
-    company_name: req.body.company_name.replace(/ /g, '-'),
+    company_id: mongoose.Types.ObjectId(company.id),
     admin_id: req.user._id,
-    moderator_id: req.user._id,
-    author_id: req.user._id,
-    journal_num: count + 1,
+    journal_num: num,
   }
   const journal = await Journal.create(info)
   if (!journal) {

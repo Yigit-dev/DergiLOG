@@ -29,7 +29,7 @@ const updateUser = async (req, res) => {
     }
     await user.updateOne(req.body, { new: true })
     await user.save()
-    return new Response(user, 'Successfully Updated Profile').success(res)
+    return new Response('', 'Successfully Updated Profile').success(res)
   } catch (error) {
     console.log(error)
     throw new APIError('Failed to Update Profile')

@@ -1,17 +1,16 @@
 const Joi = require('joi')
 
 const createValidation = Joi.object({
-  cover: Joi.string().required().min(4).max(30),
+  cover: Joi.string().min(4).max(30),
   title: Joi.string().required().min(4).max(30),
-  description: Joi.string().required(),
-  tags: Joi.array().items(Joi.string()).required(),
-  category: Joi.string().required(),
-  content: Joi.string().required().min(10),
+  description: Joi.string(),
+  tags: Joi.array().items(Joi.string()),
+  category: Joi.string(),
+  content: Joi.string().min(10),
 })
 const updateValidation = Joi.object({
   cover: Joi.string().min(4).max(30),
   title: Joi.string().min(4).max(30),
-
   description: Joi.string(),
   tags: Joi.array().items(Joi.string()),
   category: Joi.string(),

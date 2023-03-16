@@ -24,7 +24,7 @@ const createPost = async (req, res) => {
       ...req.body,
       company_name: company.company_name,
       slug: req.body.title.replace(/ /g, '-'),
-      date: moment().format('YYYY-MM-DD HH:mm:ss'),
+      date: new Date(moment().format('YYYY-MM-DD HH:mm:ss')),
       company_id: mongoose.Types.ObjectId(company.id),
       author_id: mongoose.Types.ObjectId(req.user.id),
     })
@@ -45,12 +45,12 @@ const updatePost = async (req, res) => {
     checkRole('admin', 'moderator', 'author')
     const { id } = req.params
     console.log(id)
-    const post = await Post.findByIdAndUpdate(id, req.body)
+    const post = await Post.findByIdAndUpdate(id, req.body, { returnOriginal: false })
     console.log(post)
     if (!post) {
       throw new APIError('Failed to update post')
     }
-    return new Response('', 'Successfully Updated').success(res)
+    return new Response(post, 'Successfully Updated').success(res)
   } catch (error) {
     throw new APIError('Failed to update post')
   }
@@ -63,7 +63,7 @@ const deletePost = async (req, res) => {
     if (!post) {
       throw new APIError('Failed to delete post')
     }
-    return new Response('', 'Successfully Deleted').success(res)
+    return new Response(post, 'Successfully Deleted').success(res)
   } catch (error) {
     throw new APIError('Failed to delete post')
   }

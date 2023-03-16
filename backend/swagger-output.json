@@ -353,7 +353,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "company_name": {
+                "journal_name": {
                   "example": "any"
                 }
               }
@@ -650,6 +650,19 @@
             "description": "OK"
           }
         }
+      }
+    },
+    "/admin/": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {}
       }
     }
   },
