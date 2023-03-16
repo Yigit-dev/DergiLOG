@@ -588,16 +588,10 @@
         "responses": {}
       }
     },
-    "/profile/{username}/{id}": {
+    "/profile/{id}": {
       "get": {
         "description": "",
         "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "id",
             "in": "path",
@@ -615,12 +609,6 @@
       "put": {
         "description": "",
         "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "id",
             "in": "path",

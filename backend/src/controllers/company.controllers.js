@@ -67,10 +67,11 @@ const getCompanyJournals = async (req, res) => {
     const member = company.company_members.find(member => member.equals(id))
     console.log('MEMBER:' + member)
     if (!member) return new Response(null, 'You are not part of this company.').error401(res)
-    const journal = await Journal.find({ company_name: companyName })
+    const journal = await Journal.find({ company_id: company.id })
     if (!journal) return new Response(null, 'Journal not found.').error400(res)
     return new Response(journal, 'Success').success(res)
   } catch (err) {
+    console.log(err)
     throw new APIError('APIERROR', 400)
   }
 }
