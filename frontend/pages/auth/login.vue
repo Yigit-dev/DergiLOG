@@ -6,7 +6,6 @@ const onSubmit = data => {
   const { login, password } = Object.fromEntries(new FormData(data.target))
   return authStore.login(login, password).catch(error => console.error(error))
 }
-
 </script>
 <template>
   <div class="min-h-screen bg-black">

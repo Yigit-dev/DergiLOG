@@ -3,6 +3,9 @@ definePageMeta({
   middleware: ['auth'],
   layout: 'dashboard',
 })
+import { useCompanyStore } from '~~/stores'
+
+useCompanyStore().loadJournal()
 </script>
 <template>
   <div>

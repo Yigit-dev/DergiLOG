@@ -5,17 +5,28 @@ export const useCompanyStore = defineStore('CompanyStore', {
     company: {},
     posts: [],
     journals: [],
-    members: []
+    members: [],
   }),
   actions: {
-    async loadJournal(){
-      await $fetch(`http://localhost:3000/company/trt/journals`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDAzOTdkYTRmMDhkOTliYTFlMzk1ZGMiLCJuYW1lIjoiS3ViaWxheSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY3Nzk2NTc5OCwiZXhwIjoxNjc3OTY2Njk4fQ.x1ZIgPNCuH80ElqrR2o27VwoWmFwB74A8Yw1QqX83Qw`,
-              'x-api-key': useRuntimeConfig().API_KEY,
-            },
-        }).then(res => this.journals = res.data)
-    }
+    async loadJournal() {
+      await useFetch('/api/user/login').then(async res => {
+        let profileId = res.data.value.user_id
+        await $fetch(`http://localhost:3000/profile/${profileId}`, {
+          method: 'GET',
+          headers: {
+            'x-api-key': useRuntimeConfig().API_KEY,
+          },
+        }).then(res => {
+          this.company = res.data.company_info
+        })
+      })
+      await $fetch(`http://localhost:3000/company/${this.company.company_name}/journals`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDAzOTdkYTRmMDhkOTliYTFlMzk1ZGMiLCJuYW1lIjoiS3ViaWxheSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY3ODk3Nzc5MiwiZXhwIjoxNjc5MDY0MTkyfQ.qi5VfQtZphLaMcrIQBtmVXLgj_2O6_61oFmo7GdpxSU`,
+          'x-api-key': useRuntimeConfig().API_KEY,
+        },
+      }).then(res => console.log(res))
+    },
   },
 })

@@ -30,6 +30,9 @@
 <script>
 export default {
   name: 'PostCard',
+  props: {
+    card: { type: 'Array', required: true },
+  },
 }
 </script>
 <style scoped>
