@@ -1,6 +1,5 @@
 const { default: mongoose } = require('mongoose')
 const Profile = require('../models/Profile')
-const User = require('../models/User')
 const APIError = require('../utils/error')
 const Response = require('../utils/response')
 const multer = require('multer')
@@ -24,15 +23,12 @@ const updateUser = async (req, res) => {
     let { id, username } = req.params
     let objectId = mongoose.Types.ObjectId(id)
     const user = await Profile.findOne({ user_id: objectId }).populate('user_id')
-    const userdenormalize = await User.findById(objectId)
     console.log(user)
-    if (!user || user.user_id.username != username || !userdenormalize) {
+    if (!user || user.user_id.username != username) {
       throw new APIError('User Not Found')
     }
-    await userdenormalize.updateOne(req.body, { new: true })
     await user.updateOne(req.body, { new: true })
     await user.save()
-    await userdenormalize.save()
     return new Response('', 'Successfully Updated Profile').success(res)
   } catch (error) {
     console.log(error)
