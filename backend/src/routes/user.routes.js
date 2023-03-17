@@ -13,7 +13,7 @@ const {
 } = require('../controllers/user.controller')
 
 router.get('/', getAllUsers)
-router.get('/:username/:id', getUser)
+router.get('/:id', getUser)
 router.post('/register', validate(schemas.registerValidation), userRegister)
 router.post('/login', validate(schemas.loginValidation), userLoggedIn)
 router.post('/logout', userLoggedOut)

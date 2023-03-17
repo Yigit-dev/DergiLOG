@@ -14,7 +14,8 @@ const journalCreate = async (req, res) => {
 
   const isJournalExist = await Journal.find({ company_id: company.id, journal_name: req.body.journal_name })
   let num
-  if (!isJournalExist) {
+  console.log(isJournalExist)
+  if (!isJournalExist || isJournalExist.length === 0) {
     num = 1
   } else {
     num = isJournalExist[isJournalExist.length - 1].journal_num + 1
@@ -36,7 +37,7 @@ const updateJournal = async (req, res) => {
   try {
     checkRole('admin', 'moderator', 'author')
     const { id } = req.params
-    const journal = await Journal.findOneAndUpdate(id, req.body)
+    const journal = await Journal.findOneAndUpdate(id, req.body, { returnOriginal: false })
     if (!journal) {
       throw new APIError('Failed to Update Journal')
     }
@@ -51,11 +52,11 @@ const deleteJournal = async (req, res) => {
     const { id } = req.params
     const journal = await Journal.findOneAndRemove(id)
     if (!journal) {
-      throw new APIError('Failed to Update Journal')
+      throw new APIError('Failed to Delete Journal')
     }
     return new Response('', 'Successfully Deleted').success(res)
   } catch (error) {
-    throw new APIError('Failed to Update Journal')
+    throw new APIError('Failed to Delete Journal')
   }
 }
 
