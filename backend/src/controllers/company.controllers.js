@@ -5,7 +5,7 @@ const moment = require('moment')
 const { default: mongoose } = require('mongoose')
 const Journal = require('../models/Journal')
 const Post = require('../models/Post')
-
+const Profile = require('../models/Profile')
 const creatingCompany = async (req, res) => {
   try {
     let company_name = req.body.company_name.replace(/ /g, '-')
@@ -26,18 +26,19 @@ const creatingCompany = async (req, res) => {
 }
 const updatingCompany = async (req, res) => {
   try {
-    let { companyName, id } = req.params
+    let { id } = req.params
     id = mongoose.Types.ObjectId(id)
-    const company = await Company.findById(id)
-    if (company.company_name === companyName) {
-      await company.updateOne({
+    const company = await Company.findByIdAndUpdate(
+      id,
+      {
         ...req.body,
         company_name: req.body.company_name.replace(/ /g, '-'),
-      })
-      await company.save()
-      return new Response('', `${companyName} is Updated`).success(res)
-    }
-    throw new APIError(`  Company not found`)
+      },
+      { returnOriginal: false }
+    )
+    if (!company) throw new APIError(`  Company not found`)
+
+    return new Response(company, `company is Updated`).success(res)
   } catch (error) {
     console.log(error)
     throw new APIError(`Failed to update Company`)
@@ -45,14 +46,11 @@ const updatingCompany = async (req, res) => {
 }
 const deletingCompany = async (req, res) => {
   try {
-    let { companyName, id } = req.params
+    let { id } = req.params
     id = mongoose.Types.ObjectId(id)
-    const company = await Company.findById(id)
-    if (company.company_name === companyName) {
-      await company.deleteOne()
-      return new Response('', `${companyName} is Deleted`).success(res)
-    }
-    throw new APIError(`Company not found.`)
+    const company = await Company.findByIdAndRemove(id)
+    if (!company) throw new APIError(`Company not found.`)
+    return new Response('', `${company.companyName} is deleted`)
   } catch (error) {
     throw new APIError(`Failed to delete company `)
   }
@@ -92,5 +90,38 @@ const getCompanyPosts = async (req, res) => {
     throw new APIError('APIERROR', 400)
   }
 }
-
-module.exports = { creatingCompany, updatingCompany, deletingCompany, getCompanyJournals, getCompanyPosts }
+const getCompanyMembers = async (req, res) => {
+  try {
+    const { id } = req.params
+    const members = await Company.findById(id).select('company_members')
+    const profiles = await Profile.find({ user_id: { $in: members.company_members } }).populate('user_id')
+    if (!profiles) throw new APIError('Profiller yüklenemedi')
+    return new Response(profiles).success(res)
+  } catch (error) {
+    throw new APIError('APIERROR', 400)
+  }
+}
+const getLastPostsAndJournal = async (req, res) => {
+  try {
+    let { id } = req.params
+    id = mongoose.Types.ObjectId(id)
+    const posts = await Post.find({ company_id: id }).sort({ date: -1 }).limit(2)
+    const journal = await Journal.find({ company_id: id }).sort({ journal_num: -1 }).limit(1)
+    let info = {
+      posts: posts,
+      journal: journal,
+    }
+    return new Response(info).success(res)
+  } catch (error) {
+    throw new APIError('APIERROR', 400)
+  }
+}
+module.exports = {
+  creatingCompany,
+  updatingCompany,
+  deletingCompany,
+  getCompanyJournals,
+  getCompanyPosts,
+  getCompanyMembers,
+  getLastPostsAndJournal,
+}
