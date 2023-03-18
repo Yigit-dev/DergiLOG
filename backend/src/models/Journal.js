@@ -4,6 +4,7 @@ const JournalSchema = new mongoose.Schema({
   admin_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Admin' },
   journal_name: { type: String, required: true, min: 4, max: 30 },
   cover: { type: String },
+  description: { type: String },
   moderator_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Moderator' },
   author_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' },
   post_list: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],

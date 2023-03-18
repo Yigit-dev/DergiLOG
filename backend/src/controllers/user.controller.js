@@ -15,9 +15,9 @@ const getAllUsers = async (req, res) => {
 
 const getUser = async (req, res) => {
   try {
-    const { id, username } = req.params
+    const { id } = req.params
     const user = await User.findById(id)
-    if (!user || user.username !== username) {
+    if (!user) {
       throw new APIError('User Not Found')
     }
     return new Response(user).success(res)
@@ -26,6 +26,7 @@ const getUser = async (req, res) => {
   }
 }
 const userRegister = async (req, res) => {
+  //!register semalara göre düzenle
   try {
     const { password } = req.body
     const hash = await hashPassword(password, res)

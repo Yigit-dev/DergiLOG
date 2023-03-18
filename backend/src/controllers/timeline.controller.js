@@ -10,18 +10,6 @@ const getAllPosts = async (req, res) => {
   }
   return new Response(posts).success(res)
 }
-const getPost = async (req, res) => {
-  try {
-    const { id } = req.params
-    const post = await Post.findById(id)
-    if (!post) {
-      throw new APIError('Post Not Found')
-    }
-    return new Response(post).success(res)
-  } catch (error) {
-    throw new APIError('Post Not Found')
-  }
-}
 const getAllJournals = async (req, res) => {
   const journals = await Journal.find({})
   if (!journals || journals.length === 0) {
@@ -41,4 +29,4 @@ const getJournal = async (req, res) => {
     throw new APIError('Journal Not Found')
   }
 }
-module.exports = { getAllPosts, getPost, getAllJournals, getJournal }
+module.exports = { getAllPosts, getAllJournals, getJournal }
