@@ -18,7 +18,7 @@ const getPost = async (req, res) => {
 const createPost = async (req, res) => {
   try {
     checkRole('admin', 'moderator', 'author')
-    const company = await Company.findOne({ company_members: { $elemMatch: { $eq: req.user.id } } })
+    const company = await Company.findOne({ company_members: { $elemMatch: { $eq: req.user.userInfo.id } } })
     if (!company) return new Response('', 'You are not part of any company').error400(res)
     const newPost = await Post.create({
       ...req.body,
@@ -26,7 +26,7 @@ const createPost = async (req, res) => {
       slug: req.body.title.replace(/ /g, '-'),
       date: new Date(moment().format('YYYY-MM-DD HH:mm:ss')),
       company_id: mongoose.Types.ObjectId(company.id),
-      author_id: mongoose.Types.ObjectId(req.user.id),
+      author_id: mongoose.Types.ObjectId(req.user.userInfo.id),
     })
     if (!newPost) {
       throw new APIError('Failed to Create Post')
