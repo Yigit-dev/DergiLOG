@@ -4,24 +4,24 @@ import { useAuthStore } from '~/stores/auth.store'
 <template>
   <nav>
     <Logo size="text-5xl" />
-    <NuxtLink to="/journal" class="navigation" active-class="activeClass">
+    <NuxtLink to="/dashboard" class="navigation" active-class="activeClass">
       <Icon name="ph:house-fill" size="32" />
       <span>Home</span>
     </NuxtLink>
-    <NuxtLink to="/journal/notifications" class="navigation" active-class="activeClass">
+    <NuxtLink to="/dashboard/notifications" class="navigation" active-class="activeClass">
       <Icon name="ion:notifications" size="32" />
       <span>Notifications</span>
     </NuxtLink>
-    <NuxtLink to="/journal/journals" class="navigation" active-class="activeClass">
+    <NuxtLink to="/dashboard/journals" class="navigation" active-class="activeClass">
       <Icon name="ion:journal" size="32" />
       <span>Journals</span>
     </NuxtLink>
-    <NuxtLink to="/journal/posts" class="navigation" active-class="activeClass">
+    <NuxtLink to="/dashboard/posts" class="navigation" active-class="activeClass">
       <Icon name="mingcute:grid-2-fill" size="32" />
       <span>Posts</span>
     </NuxtLink>
 
-    <NuxtLink to="/journal/members" class="navigation" active-class="activeClass">
+    <NuxtLink to="/dashboard/members" class="navigation" active-class="activeClass">
       <Icon name="mdi:account-multiple" size="32" />
       <span>Members</span>
     </NuxtLink>
@@ -31,7 +31,7 @@ import { useAuthStore } from '~/stores/auth.store'
       <button class="create md:hidden"><Icon name="material-symbols:add-circle" size="32" /></button>
     </div>
 
-    <NuxtLink to="/journal/profile" class="navigation" active-class="!bg-neutral-900 hover:!text-inherit">
+    <NuxtLink to="/dashboard/profile" class="navigation" active-class="!bg-neutral-900 hover:!text-inherit">
       <Avatar />
       <div class="hidden md:block">
         <span class="text-sm">Yigit Cakmak</span>

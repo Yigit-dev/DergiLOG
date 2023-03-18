@@ -1,13 +1,11 @@
 <template>
   <div class="JournalCard">
-    <img src="../../assets/journal-cover.png" alt="" />
+    <img :src="data.cover" alt="" />
     <div class="image-filter"></div>
     <div class="content">
-      <h1>Journal</h1>
+      <h1>{{ data.journal_name }}</h1>
       <p>
-        testt est estest Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe sequi at voluptatibus
-        voluptatem accusamus numquam ad blanditiis maxime rerum voluptate velit nam voluptatum, laborum ex ducimus vero
-        earum commodi cum? est se t
+        <!-- TODO: {{data.description}} -->
       </p>
     </div>
   </div>
@@ -15,6 +13,9 @@
 <script>
 export default {
   name: 'JournalCard',
+  props: {
+    data: { type: [Array, Object], required: true },
+  },
 }
 </script>
 <style scoped>

@@ -38,7 +38,7 @@ const onSubmit = data => {
               >
                 Login
               </button>
-              <NuxtLink to="/journal">dashobard</NuxtLink>
+              <NuxtLink to="/dashboard">dashobard</NuxtLink>
               <p class="mt-4 text-sm text-white">
                 Don't have an account?
                 <span class="cursor-pointer underline"><NuxtLink to="/signup">Create Account</NuxtLink></span>
