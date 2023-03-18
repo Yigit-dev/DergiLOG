@@ -1,6 +1,6 @@
 <template>
   <div class="bg-black text-white">
-    <NuxtLink to="/journal">go DASHBOARd</NuxtLink>
+    <NuxtLink to="/dashboard">go DASHBOARd</NuxtLink>
   </div>
 </template>
 <script>

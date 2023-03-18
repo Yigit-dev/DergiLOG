@@ -2,20 +2,18 @@
   <div class="PostCard">
     <div class="p-4">
       <div class="content">
-        <h2>Title</h2>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim ad esse quis similique minus harum, ducimus
-          voluptatibus nisi voluptates laborum, soluta sunt quae provident corporis voluptatum ex cumque sapiente dicta.
-        </p>
+        <h2>{{ data.title }}</h2>
+        <p>{{ data.description }}</p>
       </div>
       <div class="actions">
         <div class="action">
           <Icon name="flat-color-icons:like" size="24" />
-          <span>23223</span>
+          <span>{{ data.likes.length }}</span>
         </div>
         <div class="action">
           <Icon name="ion:stats-chart" size="24" />
-          <span>213123</span>
+          <!--TODO: -->
+          <span>data.likes.length</span>
         </div>
         <div class="action">
           <Icon name="ic:round-keyboard-arrow-right" size="24" />
@@ -23,7 +21,7 @@
       </div>
     </div>
     <div class="PostCardImage">
-      <img src="../../assets/post-cover2.png" alt="" />
+      <img :src="data.cover" :alt="data.title" />
     </div>
   </div>
 </template>
@@ -31,7 +29,7 @@
 export default {
   name: 'PostCard',
   props: {
-    card: { type: 'Array', required: true },
+    data: { type: [Array, Object], required: true },
   },
 }
 </script>

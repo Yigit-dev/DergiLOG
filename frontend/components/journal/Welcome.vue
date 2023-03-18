@@ -7,7 +7,7 @@ if (useProfileStore().$state.profile._id === undefined) {
     await useProfileStore().loadFromDatabase(profileId)
   })
 }
-const profile = useProfileStore().$state.profile
+const profile = useProfileStore().$state.profile.user
 </script>
 <template>
   <div class="flex flex-col justify-between rounded-2xl bg-gray-200 md:flex-row md:pr-10">

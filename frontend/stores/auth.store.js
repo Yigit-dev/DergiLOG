@@ -13,10 +13,6 @@ export const useAuthStore = defineStore('Auth', {
         this.refresh_token = res.data.value.refresh_token
         this.access_token = res.data.value.access_token
         this.profileId = res.data.value.user_id
-
-        if (this.refresh_token) {
-          useRouter().push('/journal')
-        }
       })
     },
 
@@ -31,7 +27,11 @@ export const useAuthStore = defineStore('Auth', {
       }).then(res => {
         useProfileStore().load(res.data)
       })
-      this.loggedIn()
+      this.loggedIn().then(() => {
+        if (this.refresh_token) {
+          useRouter().push('/dashboard')
+        }
+      })
     },
 
     async loggedOut() {
