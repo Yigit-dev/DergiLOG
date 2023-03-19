@@ -1,5 +1,4 @@
 const EventEmitter = require('events')
-
 class Notification extends EventEmitter {
   constructor() {
     super()
@@ -10,11 +9,11 @@ class Notification extends EventEmitter {
     return savedObject
   }
   async updateObject(model, id, info) {
-    const updatedObject = await model.findByIdAndUpdate(id, info, { returnOriginal: false })
+    const updatedObject = await model.findOneAndUpdate(id, info, { returnOriginal: false })
     return updatedObject
   }
-  async gettingInformation(model, id) {
-    const information = await model.findById({ user_id: id })
+  async gettingInformation(model, info) {
+    const information = await model.findOne(info)
     return information
   }
   message(newMessage) {
