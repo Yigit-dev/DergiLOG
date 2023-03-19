@@ -9,7 +9,7 @@ const { default: mongoose } = require('mongoose')
 
 const journalCreate = async (req, res) => {
   checkRole('admin', 'moderator', 'author')
-  const company = await Company.findOne({ company_members: { $elemMatch: { $eq: req.user.id } } })
+  const company = await Company.findOne({ company_members: { $elemMatch: { $eq: req.user.userInfo.id } } })
   if (!company) return new Response('', 'You are not part of any company').error400(res)
 
   const isJournalExist = await Journal.find({ company_id: company.id, journal_name: req.body.journal_name })
@@ -24,7 +24,7 @@ const journalCreate = async (req, res) => {
   let info = {
     ...req.body,
     company_id: mongoose.Types.ObjectId(company.id),
-    admin_id: req.user._id,
+    admin_id: req.user.userInfo._id,
     journal_num: num,
   }
   const journal = await Journal.create(info)

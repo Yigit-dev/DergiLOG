@@ -12,7 +12,7 @@ const creatingCompany = async (req, res) => {
     let info = {
       ...req.body,
       company_name: company_name,
-      company_admin: req.user.id,
+      company_admin: req.user.userInfo.id,
       company_establishment_date: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
     }
     const newCompany = await Company.create(info)
@@ -61,7 +61,7 @@ const getCompanyJournals = async (req, res) => {
     const company = await Company.findOne({ company_name: companyName })
     console.log(company)
     if (!company) return new Response(null, 'Company not found.').error400(res)
-    const id = mongoose.Types.ObjectId(req.user._id)
+    const id = mongoose.Types.ObjectId(req.user.userInfo._id)
     const member = company.company_members.find(member => member.equals(id))
     console.log('MEMBER:' + member)
     if (!member) return new Response(null, 'You are not part of this company.').error401(res)
@@ -79,7 +79,7 @@ const getCompanyPosts = async (req, res) => {
     const company = await Company.findOne({ company_name: companyName })
     console.log(company)
     if (!company) return new Response(null, 'Company not found.').error400(res)
-    const id = mongoose.Types.ObjectId(req.user._id)
+    const id = mongoose.Types.ObjectId(req.user.userInfo._id)
     const member = company.company_members.find(member => member.equals(id))
     console.log('MEMBER:' + member)
     if (!member) return new Response(null, 'You are not part of this company.').error401(res)

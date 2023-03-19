@@ -10,10 +10,12 @@ class Notification extends EventEmitter {
     return savedObject
   }
   async updateObject(model, id, info) {
-    const updatedObject = await model.findById(id)
-    await updatedObject.updateOne(info)
-    await updatedObject.save()
+    const updatedObject = await model.findByIdAndUpdate(id, info, { returnOriginal: false })
     return updatedObject
+  }
+  async gettingInformation(model, id) {
+    const information = await model.findById({ user_id: id })
+    return information
   }
   message(newMessage) {
     return {

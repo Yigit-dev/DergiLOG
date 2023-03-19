@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
+const Company = require('../models/Company')
 const APIError = require('../utils/error')
 const Response = require('../utils/response')
 
@@ -38,10 +39,15 @@ const checkToken = async (req, res, next) => {
     }
     //decodedToken.sub ( user._id )
     const userInfo = await User.findById(decodedToken.sub).select('role _id name email')
+    const company_info = await Company.findOne({ company_members: { $elemMatch: { $eq: userInfo._id } } }).select('_id')
+    let info = {
+      userInfo: userInfo,
+      company_info: company_info,
+    }
     if (!userInfo) {
       throw new APIError('Invalid token', 401)
     }
-    req.user = userInfo
+    req.user = info
     next()
   })
 }
