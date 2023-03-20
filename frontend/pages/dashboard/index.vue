@@ -4,7 +4,7 @@ definePageMeta({
   layout: 'dashboard',
 })
 import { useCompanyStore } from '~~/stores'
-const company = await useCompanyStore()
+const company = useCompanyStore()
 await company.dashboardData()
 </script>
 <template>

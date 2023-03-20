@@ -1,14 +1,16 @@
 <template>
-  <div class="JournalCard">
-    <img :src="data.cover" alt="" />
-    <div class="image-filter"></div>
-    <div class="content">
-      <h1>{{ data.journal_name }}</h1>
-      <p>
-        <!-- TODO: {{data.description}} -->
-      </p>
+  <NuxtLink :to="{ path: `/dashboard/journal/${data.journal_name}/${data._id}` }">
+    <div class="JournalCard">
+      <img :src="data.cover" alt="" />
+      <div class="image-filter"></div>
+      <div class="content">
+        <h1>{{ data.journal_name }}</h1>
+        <p>
+          <!-- TODO: {{data.description}} -->
+        </p>
+      </div>
     </div>
-  </div>
+  </NuxtLink>
 </template>
 <script>
 export default {
