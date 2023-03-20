@@ -643,7 +643,7 @@
         }
       }
     },
-    "/admin/sendInvate/{id}": {
+    "/admin/sendInvite/{id}": {
       "post": {
         "description": "",
         "parameters": [
@@ -669,10 +669,16 @@
         }
       }
     },
-    "/admin/acceptInvate": {
+    "/admin/acceptInvite/{notificationId}": {
       "post": {
         "description": "",
         "parameters": [
+          {
+            "name": "notificationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "authorization",
             "in": "header",
@@ -686,10 +692,16 @@
         }
       }
     },
-    "/admin/rejectInvate": {
+    "/admin/rejectInvite/{notificationId}": {
       "post": {
         "description": "",
         "parameters": [
+          {
+            "name": "notificationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "authorization",
             "in": "header",

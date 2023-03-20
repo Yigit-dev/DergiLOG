@@ -1,17 +1,22 @@
 const router = require('express').Router()
-const { sendAnInvate, accepInvate, rejectInvate } = require('../controllers/admin.controller')
+const { sendInvite, accepInvite, rejectInvite } = require('../controllers/admin.controller')
 const { checkToken } = require('../middlewares/auth')
 const checkRole = require('../middlewares/checkRoles')
 const validate = require('../middlewares/validations/validate')
 const schemas = require('../utils/validations/Joi.validation.Notification')
 
 router.post(
-  '/sendInvate/:id',
+  '/sendInvite/:id',
   validate(schemas.createValidation),
   checkToken,
   checkRole('admin', 'moderator'),
-  sendAnInvate
+  sendInvite
 )
-router.post('/acceptInvate', checkToken, checkRole('admin', 'moderator', 'author'), accepInvate)
-router.post('/rejectInvate', checkToken, checkRole('admin', 'moderator', 'author'), rejectInvate)
+router.post('/acceptInvite/:notificationId', checkToken, checkRole('admin', 'moderator', 'author', 'user'), accepInvite)
+router.post(
+  '/rejectInvite/:notificationId',
+  checkToken,
+  checkRole('admin', 'moderator', 'author', 'user'),
+  rejectInvite
+)
 module.exports = router
