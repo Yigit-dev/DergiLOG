@@ -4,7 +4,6 @@ definePageMeta({
   layout: 'dashboard',
 })
 import { useCompanyStore } from '~~/stores'
-import { useAuthStore } from '~~/stores'
 await useCompanyStore().loadPost()
 </script>
 <template>
@@ -16,7 +15,6 @@ await useCompanyStore().loadPost()
   </div>
 </template>
 <script>
-/* import { useCompanyStore } from '~~/stores' */
 import PostCard from '@/components/journal/PostCard.vue'
 export default {
   name: 'Post',
