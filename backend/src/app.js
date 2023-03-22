@@ -36,7 +36,8 @@ app.use(
 app.use(indexRouter)
 app.use(errorHandlerMiddleware)
 //  MULTER
-app.use('/uploads', express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public')))
+app.use('/uploads', express.static(path.join(__dirname)))
 
 app.listen(port, () => {
   console.log(`server listening on port : ${port}`)
