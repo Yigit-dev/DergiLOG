@@ -18,7 +18,9 @@ const sendInvite = async (req, res) => {
     if (!req.user.company_info) return new Response('You are not part of any Company').error401(res)
 
     let info = {
-      message: `${req.user.userInfo.name} adlı kullanıcı ${req.user.company_info.company_name} şirketinde çalışmayı.`,
+      message:
+        req.body.message ||
+        `${req.user.userInfo.name} adlı kullanıcı ${req.user.company_info.company_name} şirketinde çalışmayı.`,
       company_id: req.user.company_info._id,
       sender_id: req.user.userInfo._id,
       user_id: id,
@@ -44,14 +46,21 @@ const accepInvite = async (req, res) => {
     if (req.user.userInfo.role.toLowerCase() == 'author') model = Author
     else if (req.user.userInfo.role.toLowerCase() == 'moderator') model = Moderator
     else if (req.user.userInfo.role.toLowerCase() == 'admin') model = Admin
-    await notification.accept(req.params.notificationId, NotificationModel, User, model, CompanyModel)
+    else if (req.user.userInfo.role.toLowerCase() == 'user') model = ''
+    await notification.accept(
+      req.params.notificationId,
+      NotificationModel,
+      model,
+      CompanyModel,
+      req.user.userInfo,
+      User
+    )
     return new Response('', 'Kabul edildi').success(res)
   } catch (error) {
     console.log(error)
     throw new APIError('We cant accept that notification try later')
   }
 }
-
 const rejectInvite = async (req, res) => {
   try {
     await notification.reject(req.params.notificationId, NotificationModel, User)
@@ -61,4 +70,5 @@ const rejectInvite = async (req, res) => {
     throw new APIError('We cant reject that notification try later')
   }
 }
+
 module.exports = { sendInvite, accepInvite, rejectInvite }
