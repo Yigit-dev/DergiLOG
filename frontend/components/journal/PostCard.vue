@@ -10,14 +10,11 @@
           <Icon name="flat-color-icons:like" size="24" />
           <span>{{ data.likes.length }}</span>
         </div>
-        <div class="action">
-          <Icon name="ion:stats-chart" size="24" />
-          <!--TODO: -->
-          <span>data.likes.length</span>
-        </div>
-        <div class="action">
-          <Icon name="ic:round-keyboard-arrow-right" size="24" />
-        </div>
+        <NuxtLink :to="{ path: `/dashboard/post/${data.slug}/${data._id}` }">
+          <div class="action">
+            <Icon name="ic:round-keyboard-arrow-right" size="24" />
+          </div>
+        </NuxtLink>
       </div>
     </div>
     <div class="PostCardImage">

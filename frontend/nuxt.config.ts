@@ -9,6 +9,9 @@ export default defineNuxtConfig({
       API_KEY: process.env.API_KEY,
     },
   },
+  pinia: {
+    autoImports: ['defineStore', ['defineStore', 'definePiniaStore']],
+  },
   postcss: {
     plugins: {
       tailwindcss: {},
