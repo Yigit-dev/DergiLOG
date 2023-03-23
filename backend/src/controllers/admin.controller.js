@@ -9,6 +9,7 @@ const Author = require('../models/Author')
 const CompanyModel = require('../models/Company')
 const Profile = require('../models/Profile')
 const User = require('../models/User')
+const Post = require('../models/Post')
 let notification = new Notification()
 
 const sendInvite = async (req, res) => {
@@ -70,4 +71,73 @@ const rejectInvite = async (req, res) => {
   }
 }
 
-module.exports = { sendInvite, accepInvite, rejectInvite }
+const sendPostStatusUpdate = async (req, res) => {
+  try {
+    const compnyAdmin = await notification.getModelInformation(Admin, { company_id: req.user.company_info._id })
+    const companyMod = await notification.getModelInformation(Moderator, { company_id: req.user.company_info._id })
+    const post = await notification.getModelInformation(Post, { _id: req.params.id })
+
+    await companyMod.concat(compnyAdmin).forEach(async member => {
+      const info = {
+        message: `${req.user.userInfo.name} adlı kullanıcı http://localhost:3000/${post[0].slug}/${post[0]._id} yayınlamak istiyor.`,
+        company_id: req.user.company_info._id,
+        sender_id: req.user.userInfo._id,
+        user_id: member.user_id,
+        notificationType: 'invite',
+        status: 'unseen',
+      }
+      await notification.createNewNotification(NotificationModel, info)
+    })
+    return new Response('').success(res)
+  } catch (error) {
+    throw new APIError('We cant send notification now try laterrr')
+  }
+}
+const acceptPostStatus = async (req, res) => {
+  try {
+    const { postId } = req.params
+    const { notificationId } = req.params
+    await notification.updateModel(Post, { _id: mongoose.Types.ObjectId(postId) }, { status: 'Published' })
+    await notification.updateModel(NotificationModel, { _id: notificationId }, { status: 'accepted' })
+    const postInformation = await notification.getModelInformation(Post, { _id: mongoose.Types.ObjectId(postId) })
+    console.log(postInformation[0].author_id)
+    await notification.updateModel(
+      Author,
+      { user_id: postInformation[0].author_id },
+      { $push: { post_list: mongoose.Types.ObjectId(postId) } }
+    )
+    const allNotifications = await notification.getModelInformation(NotificationModel, {})
+    allNotifications.forEach(async noti => {
+      if (noti.message.includes(postId))
+        await notification.updateModel(NotificationModel, noti._id, { status: 'accepted' })
+    })
+    return new Response('').success(res)
+  } catch (error) {
+    console.log(error)
+    throw new APIError('We cant accept that notification try later')
+  }
+}
+const rejectPostStatus = async (req, res) => {
+  try {
+    const { postId } = req.params
+    const { notificationId } = req.params
+    await notification.updateModel(Post, { _id: mongoose.Types.ObjectId(postId) }, { status: 'revise' })
+    await notification.updateModel(NotificationModel, { _id: notificationId }, { status: 'rejected' })
+    const postInformation = await notification.getModelInformation(Post, { _id: mongoose.Types.ObjectId(postId) })
+    console.log(postInformation[0].author_id)
+    await notification.updateModel(
+      Author,
+      { user_id: postInformation[0].author_id },
+      { $push: { reject_list: mongoose.Types.ObjectId(postId) } }
+    )
+    const allNotifications = await notification.getModelInformation(NotificationModel, {})
+    allNotifications.forEach(async noti => {
+      if (noti.message.includes(postId))
+        await notification.updateModel(NotificationModel, noti._id, { status: 'rejected' })
+    })
+    return new Response('').success(res)
+  } catch (error) {
+    throw new APIError('We cant rejected that notification try later')
+  }
+}
+module.exports = { sendInvite, accepInvite, rejectInvite, sendPostStatusUpdate, acceptPostStatus, rejectPostStatus }

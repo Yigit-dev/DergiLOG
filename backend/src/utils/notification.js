@@ -10,6 +10,14 @@ class Notification {
     const createdModel = await model.create(info)
     return createdModel
   }
+  async getModelInformation(model, info) {
+    const modelInformation = await model.find(info)
+    return modelInformation
+  }
+  async updateModel(model, id, info) {
+    const updatedModel = await model.findOneAndUpdate(id, info, { returnOriginal: false })
+    return updatedModel
+  }
 
   async accept(notficitaionId, notificationModel, roleModel, companyModel, reqUserInfo, userModel, role) {
     try {
