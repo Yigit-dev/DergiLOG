@@ -27,7 +27,7 @@ const sendInvite = async (req, res) => {
       notificationType: 'invite',
       status: 'waiting',
     }
-    const createdNoti = await notification.createInviteNotification(NotificationModel, info)
+    const createdNoti = await notification.createNewNotification(NotificationModel, info)
     const user = await Profile.findOne({ user_id: mongoose.Types.ObjectId(id) })
     user.notifications.push(createdNoti.id)
     user.save()
@@ -38,8 +38,6 @@ const sendInvite = async (req, res) => {
     throw new APIError('We cant send notification !!!')
   }
 }
-//! sıkıntıısı birden fazla kez aynı bildirim gönderiyor accept ve reject
-//! accept bi tık yavaş 3 tane db sordugus ve update var
 const accepInvite = async (req, res) => {
   try {
     let model
@@ -53,7 +51,8 @@ const accepInvite = async (req, res) => {
       model,
       CompanyModel,
       req.user.userInfo,
-      User
+      User,
+      req.user.userInfo.role
     )
     return new Response('', 'Kabul edildi').success(res)
   } catch (error) {
@@ -63,7 +62,7 @@ const accepInvite = async (req, res) => {
 }
 const rejectInvite = async (req, res) => {
   try {
-    await notification.reject(req.params.notificationId, NotificationModel, User)
+    await notification.reject(req.params.notificationId, NotificationModel, req.user.userInfo)
     return new Response('', 'İstek reddedildi').success(res)
   } catch (error) {
     console.log(error)
