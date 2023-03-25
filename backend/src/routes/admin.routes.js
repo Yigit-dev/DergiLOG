@@ -6,6 +6,9 @@ const {
   sendPostStatusUpdate,
   acceptPostStatus,
   rejectPostStatus,
+  sendJournalConfirmationUpdate,
+  acceptJournalConfirmation,
+  rejectJournalConfirmation,
 } = require('../controllers/admin.controller')
 const { checkToken } = require('../middlewares/auth')
 const checkRole = require('../middlewares/checkRoles')
@@ -29,5 +32,17 @@ router.post(
 router.post('/sendPostStatusUpdate/:id', checkToken, checkRole('author'), sendPostStatusUpdate)
 router.post('/acceptPostStatus/:notificationId/:postId', checkToken, checkRole('admin', 'moderator'), acceptPostStatus)
 router.post('/rejectPostStatus/:notificationId/:postId', checkToken, checkRole('admin', 'moderator'), rejectPostStatus)
-
+router.post('/sendJournalConfirmationUpdate/:id', checkToken, checkRole('moderator'), sendJournalConfirmationUpdate)
+router.post(
+  '/acceptJournalConfirmation/:notificationId/:JournalId',
+  checkToken,
+  checkRole('admin'),
+  acceptJournalConfirmation
+)
+router.post(
+  '/rejectJournalConfirmation/:notificationId/:JournalId',
+  checkToken,
+  checkRole('admin'),
+  rejectJournalConfirmation
+)
 module.exports = router

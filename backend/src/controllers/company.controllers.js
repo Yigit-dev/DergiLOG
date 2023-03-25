@@ -12,8 +12,7 @@ const creatingCompany = async (req, res) => {
     let info = {
       ...req.body,
       company_name: company_name,
-      company_admin: req.user.userInfo.id,
-      company_establishment_date: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+      company_members: req.user.userInfo._id,
     }
     const newCompany = await Company.create(info)
     if (!newCompany) throw new APIError('Failed to Create Company')
